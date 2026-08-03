@@ -59,16 +59,16 @@ export function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="bg-surface-warm px-6 py-24 sm:px-10 lg:px-16"
+      className="bg-surface-warm px-4 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24"
     >
       <div className="mx-auto max-w-5xl text-center">
         <Reveal variant="up">
           <SplitHeading
             lead="Guests"
             rest="who booked our chef in Lombok"
-            className="text-3xl sm:text-4xl md:text-5xl"
+            className="text-2xl leading-snug sm:text-3xl md:text-4xl lg:text-5xl"
           />
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-ink sm:text-lg">
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-ink sm:mt-4 sm:text-base md:text-lg">
             Real feedback from villa stays and holiday homes across the island.
           </p>
         </Reveal>
@@ -97,14 +97,16 @@ export function Testimonials() {
               className="flex flex-col items-center"
             >
               <StarRating rating={story.rating} />
-              <blockquote className="mt-3 font-display text-xl leading-snug text-ink sm:text-2xl">
+              <blockquote className="mt-3 font-display text-lg leading-snug text-ink sm:text-xl md:text-2xl">
                 “{story.quote}”
               </blockquote>
-              <p className="mt-4 text-sm leading-relaxed text-ink/70">
+              <p className="mt-3 text-sm leading-relaxed text-ink/70 sm:mt-4">
                 {story.review}
               </p>
-              <p className="mt-5 text-sm font-medium text-ink">{story.name}</p>
-              <p className="mt-1 text-sm text-ink/60">{story.place}</p>
+              <p className="mt-4 text-sm font-medium text-ink sm:mt-5">
+                {story.name}
+              </p>
+              <p className="mt-1 text-xs text-ink/60 sm:text-sm">{story.place}</p>
             </Reveal>
           ))}
         </ul>

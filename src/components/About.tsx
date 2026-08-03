@@ -23,19 +23,19 @@ export function About() {
         <Reveal
           variant="right"
           delay={1}
-          className="flex flex-col justify-center px-6 py-16 text-center sm:px-10 lg:px-16 lg:py-24 lg:text-left"
+          className="flex flex-col justify-center px-4 py-12 text-center sm:px-10 sm:py-16 lg:px-16 lg:py-24 lg:text-left"
         >
           <SplitHeading
             lead="Dining"
             rest="at your villa, not a restaurant"
-            className="text-3xl sm:text-4xl md:text-5xl"
+            className="text-2xl leading-snug sm:text-3xl md:text-4xl lg:text-5xl"
           />
-          <p className="mt-5 text-base leading-relaxed text-ink sm:text-lg">
+          <p className="mt-4 text-sm leading-relaxed text-ink sm:mt-5 sm:text-base md:text-lg">
             Private Chef Lombok is an in-villa chef service. We shop, cook, and
             plate in your holiday home so you can host dinner without leaving
             the property.
           </p>
-          <p className="mt-4 text-base leading-relaxed text-ink sm:text-lg">
+          <p className="mt-3 text-sm leading-relaxed text-ink sm:mt-4 sm:text-base md:text-lg">
             Ideal for couples, families, and friend groups who want a personal
             dining experience with Indonesian flavours, seafood, and flexible
             menus built around your guests.

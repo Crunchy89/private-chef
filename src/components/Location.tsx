@@ -6,7 +6,7 @@ export function Location() {
   return (
     <section
       id="location"
-      className="bg-surface-dark px-6 py-24 text-cream sm:px-10 lg:px-16"
+      className="bg-surface-dark px-4 py-16 text-cream sm:px-10 sm:py-20 lg:px-16 lg:py-24"
     >
       <div className="mx-auto max-w-5xl text-center">
         <Reveal variant="up">
@@ -14,9 +14,9 @@ export function Location() {
             lead="Service"
             rest="area across Lombok"
             tone="dark"
-            className="text-3xl sm:text-4xl md:text-5xl"
+            className="text-2xl leading-snug sm:text-3xl md:text-4xl lg:text-5xl"
           />
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-cream/75 sm:text-lg">
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-cream/75 sm:mt-4 sm:text-base md:text-lg">
             {site.location.label}. Send your villa pin when you book and we
             confirm travel for your private chef dinner.
           </p>

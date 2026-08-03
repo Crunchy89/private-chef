@@ -106,7 +106,7 @@ export function SiteHeader() {
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="block py-1 font-display text-2xl text-ink"
+                  className="block py-1 font-display text-xl text-ink sm:text-2xl"
                   onClick={() => setOpen(false)}
                 >
                   {link.label}

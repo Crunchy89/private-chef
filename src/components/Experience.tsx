@@ -57,7 +57,7 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="bg-surface-cream px-6 py-24 sm:px-10 lg:px-16"
+      className="bg-surface-cream px-4 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24"
     >
       <div className="mx-auto max-w-5xl">
         <ul className="grid gap-12 md:grid-cols-3 md:gap-10">
@@ -71,10 +71,10 @@ export function Experience() {
                   {item.id === "share" && <ShareIcon />}
                   {item.id === "direction" && <DirectionIcon />}
                 </span>
-                <h3 className="mt-5 font-display text-xl text-ink sm:text-2xl">
+                <h3 className="mt-4 font-display text-lg text-ink sm:mt-5 sm:text-xl md:text-2xl">
                   {item.id === "share" && copied ? "Link copied" : item.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-ink/70 sm:text-base">
+                <p className="mt-2 text-sm leading-relaxed text-ink/70 sm:mt-3 sm:text-base">
                   {item.copy}
                 </p>
               </>

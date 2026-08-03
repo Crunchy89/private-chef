@@ -7,8 +7,10 @@ export function SiteFooter() {
       style={{ backgroundColor: "#121212" }}
     >
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 text-center">
-        <p className="font-display text-lg text-candle">{site.name}</p>
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-cream/60">
+        <p className="font-display text-base text-candle sm:text-lg">
+          {site.name}
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-cream/60 sm:gap-x-6 sm:gap-y-3 sm:text-sm">
           <a href="#testimonials" className="transition-colors hover:text-candle">
             Testimonials
           </a>

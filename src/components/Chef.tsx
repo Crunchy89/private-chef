@@ -8,19 +8,19 @@ export function Chef() {
       <div className="mx-auto grid max-w-6xl items-center lg:grid-cols-2">
         <Reveal
           variant="left"
-          className="order-2 flex flex-col justify-center px-6 py-16 text-center sm:px-10 lg:order-1 lg:px-16 lg:py-24 lg:text-left"
+          className="order-2 flex flex-col justify-center px-4 py-12 text-center sm:px-10 sm:py-16 lg:order-1 lg:px-16 lg:py-24 lg:text-left"
         >
           <SplitHeading
             lead="What"
             rest="our private chef service includes"
-            className="text-3xl sm:text-4xl md:text-5xl"
+            className="text-2xl leading-snug sm:text-3xl md:text-4xl lg:text-5xl"
           />
-          <p className="mt-5 text-base leading-relaxed text-ink sm:text-lg">
+          <p className="mt-4 text-sm leading-relaxed text-ink sm:mt-5 sm:text-base md:text-lg">
             Menu planning, fresh market ingredients, cooking in your kitchen,
             plating, and clean-up. You enjoy the meal — we handle the work
             behind it.
           </p>
-          <p className="mt-4 text-base leading-relaxed text-ink sm:text-lg">
+          <p className="mt-3 text-sm leading-relaxed text-ink sm:mt-4 sm:text-base md:text-lg">
             Share allergies, spice level, and preferences on WhatsApp. We
             confirm availability for your Lombok dates and send a clear quote
             before you book.
