@@ -11,14 +11,14 @@ export function Location() {
       <div className="mx-auto max-w-5xl text-center">
         <Reveal variant="up">
           <SplitHeading
-            lead="Find"
-            rest="us on the map"
+            lead="Service"
+            rest="area across Lombok"
             tone="dark"
             className="text-3xl sm:text-4xl md:text-5xl"
           />
           <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-cream/75 sm:text-lg">
-            {site.location.label}. We cook at villas and holiday homes across the
-            island — tell us your pin when you book.
+            {site.location.label}. Send your villa pin when you book and we
+            confirm travel for your private chef dinner.
           </p>
         </Reveal>
 

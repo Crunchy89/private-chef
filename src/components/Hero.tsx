@@ -6,7 +6,7 @@ export function Hero() {
     <section className="relative min-h-[100svh] overflow-hidden">
       <Image
         src={site.heroImage}
-        alt="Private dining table set for an intimate meal"
+        alt="Private chef dinner service at a villa in Lombok"
         fill
         priority
         sizes="100vw"
@@ -21,19 +21,19 @@ export function Hero() {
             {site.name}
           </p>
           <h1 className="animate-rise-delay-1 mt-5 font-display text-4xl leading-[1.05] tracking-tight text-cream [text-shadow:0_2px_20px_rgba(0,0,0,0.7)] sm:text-5xl md:text-6xl lg:text-7xl">
-            <span className="text-candle">Intimate</span> dining, cooked where
-            you stay.
+            <span className="text-candle">Private chef</span> service for your
+            villa in Lombok.
           </h1>
           <p className="animate-rise-delay-2 mx-auto mt-5 max-w-xl text-base leading-relaxed text-cream [text-shadow:0_2px_14px_rgba(0,0,0,0.7)] sm:text-lg">
-            Seasonal Indonesian and modern plates, prepared in your villa —
-            from Kuta Lombok across the island.
+            We come to your kitchen, cook a custom menu, and leave the table
+            ready for you — from Kuta Lombok to Senggigi, Mandalika, and beyond.
           </p>
           <div className="animate-rise-delay-2 mt-9 flex flex-wrap justify-center gap-3">
             <a
               href="#location"
               className="inline-flex items-center justify-center rounded-full bg-candle px-7 py-3.5 text-sm font-medium tracking-wide text-ink shadow-[0_8px_24px_rgba(0,0,0,0.35)] transition-colors duration-300 hover:bg-cream"
             >
-              See location
+              Service area
             </a>
           </div>
         </div>

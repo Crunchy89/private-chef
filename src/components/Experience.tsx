@@ -7,20 +7,20 @@ import { site, whatsappBookingUrl } from "@/lib/site";
 const actions = [
   {
     id: "whatsapp",
-    title: "WhatsApp",
-    copy: "Share your dates and guest count. We confirm menu and pricing in one thread.",
+    title: "Book the chef",
+    copy: "Message us on WhatsApp with your villa location, dates, and guest count. We reply with menu options and pricing.",
     href: whatsappBookingUrl(),
     external: true,
   },
   {
     id: "share",
-    title: "Share",
-    copy: "Send this page to friends or villa hosts — the link works anywhere.",
+    title: "Share with hosts",
+    copy: "Send this page to friends or your villa host so they can book the same private chef service in Lombok.",
   },
   {
     id: "direction",
-    title: "Directions",
-    copy: "Based in Kuta Lombok. Open the map for the pin, or send us yours when you book.",
+    title: "Where we cook",
+    copy: "We are based in Kuta Lombok and travel to villas and holiday homes across the island.",
     href: site.location.mapsLink,
     external: true,
   },

@@ -11,18 +11,19 @@ export function Chef() {
           className="order-2 flex flex-col justify-center px-6 py-16 text-center sm:px-10 lg:order-1 lg:px-16 lg:py-24 lg:text-left"
         >
           <SplitHeading
-            lead="Your"
-            rest="private chef in Lombok"
+            lead="What"
+            rest="our private chef service includes"
             className="text-3xl sm:text-4xl md:text-5xl"
           />
           <p className="mt-5 text-base leading-relaxed text-ink sm:text-lg">
-            Every plate is finished by hand — fresh seafood, island produce,
-            and careful plating brought to your villa kitchen. No restaurant
-            rush. Just focused cooking for your table.
+            Menu planning, fresh market ingredients, cooking in your kitchen,
+            plating, and clean-up. You enjoy the meal — we handle the work
+            behind it.
           </p>
           <p className="mt-4 text-base leading-relaxed text-ink sm:text-lg">
-            Tell us your preferences, allergies, and guest count on WhatsApp.
-            We plan the menu, shop, cook, and leave you to enjoy the night.
+            Share allergies, spice level, and preferences on WhatsApp. We
+            confirm availability for your Lombok dates and send a clear quote
+            before you book.
           </p>
         </Reveal>
 
@@ -33,7 +34,7 @@ export function Chef() {
         >
           <Image
             src="/images/img2.png"
-            alt="Private chef plating a gourmet dish"
+            alt="Private chef preparing a plated dish for villa dining in Lombok"
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-contain object-center p-4 sm:p-6"

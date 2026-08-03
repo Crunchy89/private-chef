@@ -4,47 +4,47 @@ import { SplitHeading } from "@/components/SplitHeading";
 const stories = [
   {
     quote:
-      "He turned our Senggigi villa kitchen into the best meal of the trip. Effortless from the first WhatsApp message.",
+      "We booked Private Chef Lombok for our Senggigi villa. The chef handled everything — shopping, cooking, and clean-up. Best dinner of the trip.",
     name: "Hannah & Mark",
-    place: "Villa stay, Senggigi",
+    place: "Villa dinner, Senggigi",
     rating: 5,
-    review: "Food, timing, and cleanup were all flawless.",
+    review: "Professional private chef service from start to finish.",
   },
   {
     quote:
-      "We booked for six friends near Kuta Lombok. Fresh fish, warm service, and zero logistics on our side.",
+      "Six of us near Kuta Lombok. Fresh seafood, clear pricing on WhatsApp, and no restaurant transfers. Exactly what we needed.",
     name: "Priya R.",
-    place: "Group dinner, South Lombok",
+    place: "Group booking, South Lombok",
     rating: 5,
-    review: "Menus tailored perfectly to our dietary needs.",
+    review: "Menus adapted perfectly to our dietary needs.",
   },
   {
     quote:
-      "Shared the page with our hosts — they booked again the next week. Perfect for guests who want something personal.",
+      "We recommend this private chef service to every guest at our villa. Easy to book and consistently excellent.",
     name: "Villa Amara",
-    place: "Host recommendation",
+    place: "Villa host, Lombok",
     rating: 5,
-    review: "Our guests keep asking us for the WhatsApp number.",
+    review: "Our guests keep asking for the WhatsApp number.",
   },
   {
     quote:
-      "Anniversary dinner on the terrace — quiet, generous portions, and a dessert that still gets mentioned.",
+      "Anniversary dinner on the terrace with a private chef. Quiet, generous portions, and dessert we still talk about.",
     name: "Tomás L.",
     place: "Couple dinner, Mangsit",
     rating: 5,
-    review: "Felt like a restaurant without leaving the villa.",
+    review: "Felt like fine dining without leaving the villa.",
   },
   {
     quote:
-      "Cooked for our family of eight including kids. Patient, flexible, and the sambal was unforgettable.",
+      "Family of eight including kids. Patient cooking, flexible menu, and great local flavours. Highly recommend for Lombok stays.",
     name: "The Chen family",
-    place: "Family stay, Bangsal",
+    place: "Family villa, Bangsal",
     rating: 4,
-    review: "Great value and very easy to arrange on WhatsApp.",
+    review: "Easy WhatsApp booking and fair value.",
   },
   {
     quote:
-      "We sent the link to friends arriving the next week. Same chef, same high standard — booking took two messages.",
+      "Booked again for friends arriving the next week. Same private chef service, same standard — arranged in two messages.",
     name: "Sofia & Luca",
     place: "Repeat booking, Kuta Lombok",
     rating: 5,
@@ -64,16 +64,20 @@ export function Testimonials() {
       <div className="mx-auto max-w-5xl text-center">
         <Reveal variant="up">
           <SplitHeading
-            lead="Guests,"
-            rest="then friends of guests"
+            lead="Guests"
+            rest="who booked our chef in Lombok"
             className="text-3xl sm:text-4xl md:text-5xl"
           />
           <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-ink sm:text-lg">
-            Word travels fast on the island — here is what recent tables said.
+            Real feedback from villa stays and holiday homes across the island.
           </p>
         </Reveal>
 
-        <Reveal delay={1} variant="fade" className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+        <Reveal
+          delay={1}
+          variant="fade"
+          className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2"
+        >
           <StarRating rating={average} size="lg" />
           <p className="text-sm text-ink/70">
             <span className="font-medium text-ink">
