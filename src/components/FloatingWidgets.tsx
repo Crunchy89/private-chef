@@ -32,7 +32,7 @@ export function FloatingWidgets() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-3 sm:bottom-8 sm:right-8">
+    <div className="safe-fixed-widgets fixed z-50 flex flex-col items-center gap-3">
       <a
         href={whatsappBookingUrl()}
         target="_blank"

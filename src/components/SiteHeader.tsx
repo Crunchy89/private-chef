@@ -33,16 +33,16 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+      className={`safe-fixed-header fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
         onHero
           ? "bg-gradient-to-b from-black/55 via-black/25 to-transparent"
           : "border-b border-ink/8 bg-surface-a/95 text-ink shadow-[0_1px_0_rgba(20,24,22,0.04)] backdrop-blur-md"
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4 sm:px-10 lg:px-16">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:gap-6 sm:px-10 sm:py-4 lg:px-16">
         <a
           href="#"
-          className={`font-display text-lg tracking-[0.01em] sm:text-xl ${
+          className={`min-w-0 truncate font-display text-base tracking-[0.01em] sm:text-lg md:text-xl ${
             onHero ? "text-candle" : "text-ink"
           }`}
           onClick={() => setOpen(false)}
@@ -66,7 +66,7 @@ export function SiteHeader() {
 
         <button
           type="button"
-          className="inline-flex h-10 w-10 items-center justify-center md:hidden"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center md:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -99,7 +99,7 @@ export function SiteHeader() {
       >
         <nav
           aria-label="Mobile"
-          className="border-t border-ink/10 bg-surface-a px-6 py-6 sm:px-10"
+          className="border-t border-ink/10 bg-surface-a px-4 py-6 sm:px-10"
         >
           <ul className="flex flex-col gap-4">
             {links.map((link) => (
