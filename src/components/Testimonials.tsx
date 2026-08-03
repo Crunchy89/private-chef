@@ -1,3 +1,6 @@
+import { Reveal } from "@/components/Reveal";
+import { SplitHeading } from "@/components/SplitHeading";
+
 const stories = [
   {
     quote:
@@ -56,39 +59,49 @@ export function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="bg-surface-a px-6 py-24 sm:px-10 lg:px-16"
+      className="bg-surface-warm px-6 py-24 sm:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-5xl text-center">
-        <h2 className="font-display text-3xl tracking-tight text-lagoon sm:text-4xl md:text-5xl">
-          Guests, then friends of guests
-        </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-ink/70 sm:text-lg">
-          Word travels fast on the island — here is what recent tables said.
-        </p>
+        <Reveal variant="up">
+          <SplitHeading
+            lead="Guests,"
+            rest="then friends of guests"
+            className="text-3xl sm:text-4xl md:text-5xl"
+          />
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-ink sm:text-lg">
+            Word travels fast on the island — here is what recent tables said.
+          </p>
+        </Reveal>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+        <Reveal delay={1} variant="fade" className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
           <StarRating rating={average} size="lg" />
-          <p className="text-sm text-ink/65">
+          <p className="text-sm text-ink/70">
             <span className="font-medium text-ink">
               {average.toFixed(1)} / 5
             </span>{" "}
             from {stories.length} guest reviews
           </p>
-        </div>
+        </Reveal>
 
         <ul className="mt-14 grid gap-12 sm:grid-cols-2 md:grid-cols-3 md:gap-x-10 md:gap-y-14">
-          {stories.map((story) => (
-            <li key={story.name} className="flex flex-col items-center">
+          {stories.map((story, index) => (
+            <Reveal
+              key={story.name}
+              as="li"
+              delay={(index % 3) as 0 | 1 | 2}
+              variant="up"
+              className="flex flex-col items-center"
+            >
               <StarRating rating={story.rating} />
-              <blockquote className="mt-3 font-display text-xl leading-snug text-lagoon sm:text-2xl">
+              <blockquote className="mt-3 font-display text-xl leading-snug text-ink sm:text-2xl">
                 “{story.quote}”
               </blockquote>
-              <p className="mt-4 text-sm leading-relaxed text-ink/65">
+              <p className="mt-4 text-sm leading-relaxed text-ink/70">
                 {story.review}
               </p>
               <p className="mt-5 text-sm font-medium text-ink">{story.name}</p>
-              <p className="mt-1 text-sm text-ink/55">{story.place}</p>
-            </li>
+              <p className="mt-1 text-sm text-ink/60">{story.place}</p>
+            </Reveal>
           ))}
         </ul>
       </div>
@@ -108,7 +121,7 @@ function StarRating({
 
   return (
     <div
-      className="flex items-center justify-center gap-1 text-lagoon"
+      className="flex items-center justify-center gap-1 text-candle"
       aria-label={`${rating.toFixed(1)} out of 5 stars`}
     >
       {Array.from({ length: 5 }, (_, index) => {
@@ -118,7 +131,7 @@ function StarRating({
             key={index}
             aria-hidden="true"
             viewBox="0 0 20 20"
-            className={`${starClass} ${filled ? "fill-current" : "fill-lagoon/15"}`}
+            className={`${starClass} ${filled ? "fill-current" : "fill-candle/25"}`}
           >
             <path d="M10 1.5l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.9l-4.94 2.6.94-5.5-4-3.9 5.53-.8L10 1.5z" />
           </svg>

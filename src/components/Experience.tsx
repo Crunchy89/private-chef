@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Reveal } from "@/components/Reveal";
 import { site, whatsappBookingUrl } from "@/lib/site";
 
 const actions = [
@@ -56,22 +57,24 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="bg-surface-a px-6 py-24 sm:px-10 lg:px-16"
+      className="bg-surface-cream px-6 py-24 sm:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-5xl">
         <ul className="grid gap-12 md:grid-cols-3 md:gap-10">
-          {actions.map((item) => {
+          {actions.map((item, index) => {
+            const delay = Math.min(index, 3) as 0 | 1 | 2 | 3;
+
             const content = (
               <>
-                <span className="inline-flex h-12 w-12 items-center justify-center text-lagoon transition-colors group-hover:text-ink">
+                <span className="inline-flex h-12 w-12 items-center justify-center text-ink transition-transform duration-300 group-hover:scale-110 group-hover:text-candle">
                   {item.id === "whatsapp" && <WhatsAppIcon />}
                   {item.id === "share" && <ShareIcon />}
                   {item.id === "direction" && <DirectionIcon />}
                 </span>
-                <h3 className="mt-5 font-display text-xl text-lagoon sm:text-2xl">
+                <h3 className="mt-5 font-display text-xl text-ink sm:text-2xl">
                   {item.id === "share" && copied ? "Link copied" : item.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-ink/65 sm:text-base">
+                <p className="mt-3 text-sm leading-relaxed text-ink/70 sm:text-base">
                   {item.copy}
                 </p>
               </>
@@ -79,7 +82,7 @@ export function Experience() {
 
             if (item.id === "share") {
               return (
-                <li key={item.id}>
+                <Reveal key={item.id} as="li" delay={delay} variant="up">
                   <button
                     type="button"
                     onClick={handleShare}
@@ -87,12 +90,12 @@ export function Experience() {
                   >
                     {content}
                   </button>
-                </li>
+                </Reveal>
               );
             }
 
             return (
-              <li key={item.id}>
+              <Reveal key={item.id} as="li" delay={delay} variant="up">
                 <a
                   href={item.href}
                   target={item.external ? "_blank" : undefined}
@@ -101,7 +104,7 @@ export function Experience() {
                 >
                   {content}
                 </a>
-              </li>
+              </Reveal>
             );
           })}
         </ul>

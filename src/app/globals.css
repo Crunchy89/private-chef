@@ -1,11 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --lagoon: #0a4f56;
-  --ink: #142826;
-  --surface-a: #f6f4ef;
-  --surface-b: #e4efee;
-  --background: var(--surface-a);
+  /* Section backgrounds — Edithub-style banding, warm candlelight cast */
+  --surface-cream: #f6f4ee;
+  --surface-white: #ffffff;
+  --surface-gray: #f1f1f1;
+  --surface-warm: #ebe4d8;
+  --surface-dark: #1b1b1b;
+  /* aliases used by existing components */
+  --surface-a: var(--surface-white);
+  --surface-b: var(--surface-cream);
+  /* Text — candlelight dinner */
+  --candle: #d4a05a;
+  --ink: #2a2118;
+  --lagoon: var(--candle);
+  --cream: #fff3e4;
+  --background: var(--surface-cream);
   --foreground: var(--ink);
 }
 
@@ -13,9 +23,16 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-lagoon: var(--lagoon);
+  --color-candle: var(--candle);
   --color-ink: var(--ink);
+  --color-cream: var(--cream);
   --color-surface-a: var(--surface-a);
   --color-surface-b: var(--surface-b);
+  --color-surface-cream: var(--surface-cream);
+  --color-surface-white: var(--surface-white);
+  --color-surface-gray: var(--surface-gray);
+  --color-surface-warm: var(--surface-warm);
+  --color-surface-dark: var(--surface-dark);
   --font-sans: var(--font-figtree);
   --font-display: var(--font-fraunces);
 }
@@ -31,7 +48,7 @@ body {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--lagoon) 25%, white);
+  background: color-mix(in srgb, var(--lagoon) 28%, white);
   color: var(--ink);
 }
 
@@ -84,12 +101,84 @@ body {
   animation: drift 8s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+@keyframes float-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-float-in {
+  animation: float-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-float-in-delay {
+  animation: float-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+.reveal {
+  opacity: 0;
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-up {
+  transform: translateY(2rem);
+}
+
+.reveal-left {
+  transform: translateX(-2rem);
+}
+
+.reveal-right {
+  transform: translateX(2rem);
+}
+
+.reveal-fade {
+  transform: none;
+}
+
+.reveal-scale {
+  transform: scale(0.96);
+}
+
+.reveal.delay-1 {
+  transition-delay: 0.12s;
+}
+
+.reveal.delay-2 {
+  transition-delay: 0.24s;
+}
+
+.reveal.delay-3 {
+  transition-delay: 0.36s;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-rise,
   .animate-rise-delay-1,
   .animate-rise-delay-2,
   .animate-veil,
-  .animate-drift {
+  .animate-drift,
+  .animate-float-in,
+  .animate-float-in-delay {
     animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

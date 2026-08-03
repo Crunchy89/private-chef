@@ -1,21 +1,32 @@
+import { Reveal } from "@/components/Reveal";
+import { SplitHeading } from "@/components/SplitHeading";
 import { site } from "@/lib/site";
 
 export function Location() {
   return (
     <section
       id="location"
-      className="bg-surface-b px-6 py-24 sm:px-10 lg:px-16"
+      className="bg-surface-dark px-6 py-24 text-cream sm:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-5xl text-center">
-        <h2 className="font-display text-3xl tracking-tight text-lagoon sm:text-4xl md:text-5xl">
-          Find us on the map
-        </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-ink/70 sm:text-lg">
-          {site.location.label}. We cook at villas and holiday homes across the
-          island — tell us your pin when you book.
-        </p>
+        <Reveal variant="up">
+          <SplitHeading
+            lead="Find"
+            rest="us on the map"
+            tone="dark"
+            className="text-3xl sm:text-4xl md:text-5xl"
+          />
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-cream/75 sm:text-lg">
+            {site.location.label}. We cook at villas and holiday homes across the
+            island — tell us your pin when you book.
+          </p>
+        </Reveal>
 
-        <div className="mt-10 overflow-hidden border border-lagoon/15 text-left">
+        <Reveal
+          delay={1}
+          variant="scale"
+          className="mt-10 overflow-hidden border border-cream/15 text-left"
+        >
           <iframe
             title="Private Chef Lombok location map"
             src={`https://www.google.com/maps?q=${site.location.lat},${site.location.lng}&z=13&output=embed`}
@@ -24,19 +35,23 @@ export function Location() {
             referrerPolicy="no-referrer-when-downgrade"
             allowFullScreen
           />
-        </div>
+        </Reveal>
 
-        <div className="mt-6 flex flex-col items-center gap-3">
-          <p className="text-sm text-ink/65">{site.location.address}</p>
+        <Reveal
+          delay={2}
+          variant="fade"
+          className="mt-6 flex flex-col items-center gap-3"
+        >
+          <p className="text-sm text-cream/65">{site.location.address}</p>
           <a
             href={site.location.mapsLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-medium text-lagoon underline-offset-4 transition-colors hover:underline"
+            className="text-sm font-medium text-lagoon underline-offset-4 transition-colors hover:text-cream hover:underline"
           >
             Open in Google Maps
           </a>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

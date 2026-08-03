@@ -38,7 +38,7 @@ export function FloatingWidgets() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Book on WhatsApp"
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_rgba(37,211,102,0.35)] transition-transform duration-300 hover:scale-105 hover:bg-[#1ebe57] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] sm:h-16 sm:w-16"
+        className="animate-float-in flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_rgba(37,211,102,0.35)] transition-transform duration-300 hover:scale-105 hover:bg-[#1ebe57] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] sm:h-16 sm:w-16"
       >
         <WhatsAppIcon />
       </a>
@@ -47,7 +47,7 @@ export function FloatingWidgets() {
         type="button"
         onClick={handleShare}
         aria-label={copied ? "Link copied" : "Share this page"}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-lagoon text-surface-a shadow-[0_8px_24px_rgba(10,79,86,0.3)] transition-transform duration-300 hover:scale-105 hover:bg-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lagoon sm:h-16 sm:w-16"
+        className="animate-float-in-delay flex h-14 w-14 items-center justify-center rounded-full bg-lagoon text-white shadow-[0_8px_24px_rgba(184,135,78,0.35)] transition-transform duration-300 hover:scale-105 hover:bg-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lagoon sm:h-16 sm:w-16"
       >
         {copied ? <CheckIcon /> : <ShareIcon />}
       </button>

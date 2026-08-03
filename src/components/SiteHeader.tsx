@@ -6,6 +6,7 @@ import { site } from "@/lib/site";
 const links = [
   { href: "#experience", label: "Experience" },
   { href: "#about", label: "About" },
+  { href: "#chef", label: "Chef" },
   { href: "#testimonials", label: "Testimonials" },
   { href: "#location", label: "Location" },
 ];
@@ -34,14 +35,16 @@ export function SiteHeader() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
         onHero
-          ? "bg-transparent text-surface-a"
-          : "border-b border-lagoon/10 bg-surface-a/95 text-lagoon backdrop-blur-md"
+          ? "bg-gradient-to-b from-black/55 via-black/25 to-transparent"
+          : "border-b border-ink/8 bg-surface-a/95 text-ink shadow-[0_1px_0_rgba(20,24,22,0.04)] backdrop-blur-md"
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4 sm:px-10 lg:px-16">
         <a
           href="#"
-          className="font-display text-lg tracking-[0.01em] sm:text-xl"
+          className={`font-display text-lg tracking-[0.01em] sm:text-xl ${
+            onHero ? "text-candle" : "text-ink"
+          }`}
           onClick={() => setOpen(false)}
         >
           {site.name}
@@ -52,8 +55,8 @@ export function SiteHeader() {
             <a
               key={link.href}
               href={link.href}
-              className={`text-sm tracking-wide transition-opacity hover:opacity-70 ${
-                onHero ? "text-surface-a/90" : "text-ink/70"
+              className={`text-sm tracking-wide transition-colors hover:text-candle ${
+                onHero ? "text-cream" : "text-ink/70 hover:text-candle"
               }`}
             >
               {link.label}
@@ -73,17 +76,17 @@ export function SiteHeader() {
           <span className="relative block h-3.5 w-5">
             <span
               className={`absolute left-0 h-px w-full transition-transform duration-300 ${
-                onHero ? "bg-surface-a" : "bg-lagoon"
+                onHero ? "bg-cream" : "bg-ink"
               } ${open ? "top-1.5 rotate-45" : "top-0"}`}
             />
             <span
               className={`absolute left-0 top-1.5 h-px w-full transition-opacity duration-300 ${
-                onHero ? "bg-surface-a" : "bg-lagoon"
+                onHero ? "bg-cream" : "bg-ink"
               } ${open ? "opacity-0" : "opacity-100"}`}
             />
             <span
               className={`absolute left-0 h-px w-full transition-transform duration-300 ${
-                onHero ? "bg-surface-a" : "bg-lagoon"
+                onHero ? "bg-cream" : "bg-ink"
               } ${open ? "top-1.5 -rotate-45" : "top-3"}`}
             />
           </span>
@@ -96,14 +99,14 @@ export function SiteHeader() {
       >
         <nav
           aria-label="Mobile"
-          className="border-t border-lagoon/10 bg-surface-a px-6 py-6 text-lagoon sm:px-10"
+          className="border-t border-ink/10 bg-surface-a px-6 py-6 sm:px-10"
         >
           <ul className="flex flex-col gap-4">
             {links.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="block py-1 font-display text-2xl text-lagoon"
+                  className="block py-1 font-display text-2xl text-ink"
                   onClick={() => setOpen(false)}
                 >
                   {link.label}

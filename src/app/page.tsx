@@ -1,4 +1,5 @@
 import { About } from "@/components/About";
+import { Chef } from "@/components/Chef";
 import { Experience } from "@/components/Experience";
 import { FloatingWidgets } from "@/components/FloatingWidgets";
 import { Hero } from "@/components/Hero";
@@ -15,6 +16,7 @@ export default function Home() {
       <main>
         <Experience />
         <About />
+        <Chef />
         <Testimonials />
         <Location />
       </main>
