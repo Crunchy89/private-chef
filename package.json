@@ -1,5 +1,5 @@
 {
-  "name": "private-chef",
+  "name": "private-chef-lombok",
   "version": "0.1.0",
   "private": true,
   "scripts": {
