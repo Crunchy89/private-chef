@@ -7,7 +7,7 @@ export async function About() {
   const content = await getSiteCms();
 
   return (
-    <section id="about" className="bg-surface-white">
+    <section id="about" className="section-pad-y bg-surface-white">
       <div className="mx-auto grid max-w-6xl items-center lg:grid-cols-2">
         <Reveal
           variant="left"
@@ -25,7 +25,7 @@ export async function About() {
         <Reveal
           variant="right"
           delay={1}
-          className="flex flex-col justify-center px-4 py-12 text-center sm:px-10 sm:py-16 lg:px-16 lg:py-24 lg:text-left"
+          className="flex flex-col justify-center px-4 text-center sm:px-10 lg:px-16 lg:text-left"
         >
           <SplitHeading
             lead="Dining"

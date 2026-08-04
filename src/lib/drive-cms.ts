@@ -125,7 +125,7 @@ function mapContent(payload: CmsContent): SiteCms {
   const metaAverage = Number(payload.meta?.average);
   const metaCount = Number(payload.meta?.count);
 
-  // Prefer sheet Settings / Apps Script meta (testimonials_average / testimonials_count)
+  // Prefer sheet Settings / Apps Script meta (reviews average / count overrides)
   const average = Number.isFinite(metaAverage) ? metaAverage : fromReviewsAverage;
   const count = Number.isFinite(metaCount) ? metaCount : reviews.length;
 

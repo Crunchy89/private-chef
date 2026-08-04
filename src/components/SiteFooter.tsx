@@ -11,8 +11,8 @@ export function SiteFooter() {
           {site.name}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-cream/60 sm:gap-x-6 sm:gap-y-3 sm:text-sm">
-          <a href="#testimonials" className="transition-colors hover:text-candle">
-            Testimonials
+          <a href="#reviews" className="transition-colors hover:text-candle">
+            Reviews
           </a>
           <a href="#location" className="transition-colors hover:text-candle">
             Location

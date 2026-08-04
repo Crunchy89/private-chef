@@ -7,11 +7,11 @@ export async function Chef() {
   const content = await getSiteCms();
 
   return (
-    <section id="chef" className="bg-surface-gray">
+    <section id="chef" className="section-pad-y bg-surface-gray">
       <div className="mx-auto grid max-w-6xl items-center lg:grid-cols-2">
         <Reveal
           variant="left"
-          className="order-2 flex flex-col justify-center px-4 py-12 text-center sm:px-10 sm:py-16 lg:order-1 lg:px-16 lg:py-24 lg:text-left"
+          className="order-2 flex flex-col justify-center px-4 text-center sm:px-10 lg:order-1 lg:px-16 lg:text-left"
         >
           <SplitHeading
             lead="What"

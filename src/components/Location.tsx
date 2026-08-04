@@ -6,7 +6,7 @@ export function Location() {
   return (
     <section
       id="location"
-      className="bg-surface-dark px-4 py-16 text-cream sm:px-10 sm:py-20 lg:px-16 lg:py-24"
+      className="section-pad bg-surface-dark text-cream"
     >
       <div className="mx-auto max-w-5xl text-center">
         <Reveal variant="up">

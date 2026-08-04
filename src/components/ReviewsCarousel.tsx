@@ -11,7 +11,7 @@ export type ReviewCard = {
   review: string;
 };
 
-type TestimonialsCarouselProps = {
+type ReviewsCarouselProps = {
   stories: ReviewCard[];
   average: number;
   count: number;
@@ -23,11 +23,11 @@ function getVisibleCount(width: number) {
   return 1;
 }
 
-export function TestimonialsCarousel({
+export function ReviewsCarousel({
   stories,
   average,
   count,
-}: TestimonialsCarouselProps) {
+}: ReviewsCarouselProps) {
   const [visible, setVisible] = useState(1);
   const [index, setIndex] = useState(0);
   const [offset, setOffset] = useState(0);

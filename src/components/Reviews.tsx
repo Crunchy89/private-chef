@@ -1,9 +1,9 @@
 import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
-import { TestimonialsCarousel } from "@/components/TestimonialsCarousel";
+import { ReviewsCarousel } from "@/components/ReviewsCarousel";
 import { getSiteCms } from "@/lib/drive-cms";
 
-export async function Testimonials() {
+export async function Reviews() {
   const content = await getSiteCms();
   const stories = content.reviews.map((story) => ({
     quote: story.quote,
@@ -17,25 +17,24 @@ export async function Testimonials() {
 
   return (
     <section
-      id="testimonials"
-      className="bg-surface-warm px-4 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24"
+      id="reviews"
+      className="section-pad bg-surface-warm"
       style={{ backgroundColor: "var(--surface-warm)" }}
     >
       <div className="mx-auto max-w-6xl text-center">
         <Reveal variant="up">
           <SplitHeading
-            lead="Guests"
-            rest="who booked our chef in Lombok"
+            lead="Guest"
+            rest="reviews from villa dinners in Lombok"
             className="text-2xl leading-snug sm:text-3xl md:text-4xl lg:text-5xl"
           />
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-ink sm:mt-4 sm:text-base md:text-lg">
-            {content.source === "drive"
-              ? "Guest reviews synced from our content sheet."
-              : "Real feedback from villa stays and holiday homes across the island."}
+            Honest notes from couples, families, and villa hosts who booked our
+            private chef across Kuta, Senggigi, and the rest of Lombok.
           </p>
         </Reveal>
 
-        <TestimonialsCarousel
+        <ReviewsCarousel
           stories={stories}
           average={content.average}
           count={content.count}

@@ -50,6 +50,43 @@ body {
   max-width: 100%;
 }
 
+/* Shared section rhythm — same top/bottom padding sitewide */
+.section-pad {
+  padding-block: 4rem;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .section-pad {
+    padding-block: 5rem;
+    padding-inline: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-pad {
+    padding-block: 6rem;
+    padding-inline: 4rem;
+  }
+}
+
+/* Split image/text sections: equal vertical pad, no extra horizontal on the shell */
+.section-pad-y {
+  padding-block: 4rem;
+}
+
+@media (min-width: 640px) {
+  .section-pad-y {
+    padding-block: 5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-pad-y {
+    padding-block: 6rem;
+  }
+}
+
 /* Fixed UI — keep clear margin from screen edges + notches */
 .safe-fixed-header {
   padding-top: max(0.5rem, env(safe-area-inset-top, 0px));

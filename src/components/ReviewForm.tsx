@@ -10,6 +10,9 @@ export function ReviewForm() {
   const [state, setState] = useState<FormState>("idle");
   const [error, setError] = useState("");
   const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+
+  const previewRating = hoverRating || rating;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -46,6 +49,7 @@ export function ReviewForm() {
 
       form.reset();
       setRating(0);
+      setHoverRating(0);
       setState("success");
     } catch (submitError) {
       setState("error");
@@ -60,7 +64,7 @@ export function ReviewForm() {
   return (
     <section
       id="review"
-      className="border-t border-ink/8 bg-surface-white px-4 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24"
+      className="section-pad border-t border-ink/8 bg-surface-white"
     >
       <div className="mx-auto max-w-xl text-center">
         <Reveal variant="up">
@@ -70,8 +74,9 @@ export function ReviewForm() {
             className="text-2xl leading-snug sm:text-3xl md:text-4xl"
           />
           <p className="mt-3 text-sm leading-relaxed text-ink/70 sm:mt-4 sm:text-base">
-            Had a private chef dinner in Lombok? Leave a review — it saves to
-            our Drive content sheet and appears on the site.
+            Enjoyed dinner at your villa? Tell us about the food, the evening,
+            and how booking felt — your review helps other guests choose with
+            confidence.
           </p>
         </Reveal>
 
@@ -139,26 +144,36 @@ export function ReviewForm() {
 
             <fieldset className="text-center">
               <legend className="text-sm font-medium text-ink">Rating</legend>
-              <div className="mt-3 flex justify-center gap-2 text-candle">
-                {[1, 2, 3, 4, 5].map((value) => (
-                  <button
-                    key={value}
-                    type="button"
-                    aria-label={`${value} star${value === 1 ? "" : "s"}`}
-                    onClick={() => setRating(value)}
-                    className="transition-transform hover:scale-110"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      viewBox="0 0 20 20"
-                      className={`h-9 w-9 sm:h-10 sm:w-10 ${
-                        value <= rating ? "fill-current" : "fill-candle/25"
-                      }`}
+              <div
+                className="mt-3 flex justify-center gap-2 text-candle"
+                onMouseLeave={() => setHoverRating(0)}
+              >
+                {[1, 2, 3, 4, 5].map((value) => {
+                  const active = value <= previewRating;
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      aria-label={`${value} star${value === 1 ? "" : "s"}`}
+                      aria-pressed={rating === value}
+                      onClick={() => setRating(value)}
+                      onMouseEnter={() => setHoverRating(value)}
+                      onFocus={() => setHoverRating(value)}
+                      onBlur={() => setHoverRating(0)}
+                      className="transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-candle/50 rounded-sm"
                     >
-                      <path d="M10 1.5l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.9l-4.94 2.6.94-5.5-4-3.9 5.53-.8L10 1.5z" />
-                    </svg>
-                  </button>
-                ))}
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 20 20"
+                        className={`h-9 w-9 transition-colors sm:h-10 sm:w-10 ${
+                          active ? "fill-current" : "fill-candle/25"
+                        }`}
+                      >
+                        <path d="M10 1.5l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.9l-4.94 2.6.94-5.5-4-3.9 5.53-.8L10 1.5z" />
+                      </svg>
+                    </button>
+                  );
+                })}
               </div>
             </fieldset>
 
@@ -172,7 +187,7 @@ export function ReviewForm() {
 
             {state === "success" && (
               <p className="text-center text-sm font-medium text-ink">
-                Thank you — your review was saved.
+                Thank you — we appreciate your feedback.
               </p>
             )}
             {state === "error" && (

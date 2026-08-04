@@ -21,7 +21,7 @@ const actions = [
     id: "review",
     title: "Reviews",
     copy: "Enjoyed your private chef dinner? Share your experience and help other guests discover us.",
-    href: "#testimonials",
+    href: "#reviews",
     external: false,
   },
   {
@@ -64,7 +64,7 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="bg-surface-cream px-4 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24"
+      className="bg-surface-cream section-pad"
     >
       <div className="mx-auto max-w-6xl">
         <ul className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">

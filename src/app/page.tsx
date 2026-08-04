@@ -8,7 +8,7 @@ import { Location } from "@/components/Location";
 import { ReviewForm } from "@/components/ReviewForm";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { Testimonials } from "@/components/Testimonials";
+import { Reviews } from "@/components/Reviews";
 import { getSiteCms } from "@/lib/drive-cms";
 import { absoluteUrl } from "@/lib/site";
 
@@ -38,7 +38,7 @@ export default function Home() {
         <Experience />
         <About />
         <Chef />
-        <Testimonials />
+        <Reviews />
         <ReviewForm />
         <Location />
       </main>
