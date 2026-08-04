@@ -18,6 +18,13 @@ const actions = [
     copy: "Send this page to friends or your villa host so they can book the same private chef service in Lombok.",
   },
   {
+    id: "review",
+    title: "Reviews",
+    copy: "Enjoyed your private chef dinner? Share your experience and help other guests discover us.",
+    href: "#testimonials",
+    external: false,
+  },
+  {
     id: "direction",
     title: "Where we cook",
     copy: "We are based in Kuta Lombok and travel to villas and holiday homes across the island.",
@@ -59,8 +66,8 @@ export function Experience() {
       id="experience"
       className="bg-surface-cream px-4 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24"
     >
-      <div className="mx-auto max-w-5xl">
-        <ul className="grid gap-12 md:grid-cols-3 md:gap-10">
+      <div className="mx-auto max-w-6xl">
+        <ul className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {actions.map((item, index) => {
             const delay = Math.min(index, 3) as 0 | 1 | 2 | 3;
 
@@ -69,6 +76,7 @@ export function Experience() {
                 <span className="inline-flex h-12 w-12 items-center justify-center text-ink transition-transform duration-300 group-hover:scale-110 group-hover:text-candle">
                   {item.id === "whatsapp" && <WhatsAppIcon />}
                   {item.id === "share" && <ShareIcon />}
+                  {item.id === "review" && <ReviewIcon />}
                   {item.id === "direction" && <DirectionIcon />}
                 </span>
                 <h3 className="mt-4 font-display text-lg text-ink sm:mt-5 sm:text-xl md:text-2xl">
@@ -152,6 +160,23 @@ function DirectionIcon() {
         d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11z"
       />
       <circle cx="12" cy="10" r="2.25" />
+    </svg>
+  );
+}
+
+function ReviewIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-8 w-8 fill-none stroke-current"
+      strokeWidth="1.5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 3.5l2.47 5.01 5.53.8-4 3.9.94 5.5L12 16.4l-4.94 2.61.94-5.5-4-3.9 5.53-.8L12 3.5z"
+      />
     </svg>
   );
 }

@@ -7,7 +7,7 @@ const links = [
   { href: "#experience", label: "Experience" },
   { href: "#about", label: "About" },
   { href: "#chef", label: "Chef" },
-  { href: "#testimonials", label: "Testimonials" },
+  { href: "#testimonials", label: "Reviews" },
   { href: "#location", label: "Location" },
 ];
 
@@ -29,22 +29,16 @@ export function SiteHeader() {
     };
   }, [open]);
 
-  const onHero = !scrolled && !open;
-
   return (
     <header
-      className={`safe-fixed-header fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        onHero
-          ? "bg-gradient-to-b from-black/55 via-black/25 to-transparent"
-          : "border-b border-ink/8 bg-surface-a/95 text-ink shadow-[0_1px_0_rgba(20,24,22,0.04)] backdrop-blur-md"
+      className={`safe-fixed-header fixed inset-x-0 top-0 z-50 bg-black text-cream transition-shadow duration-300 ${
+        scrolled ? "shadow-[0_1px_0_rgba(255,243,228,0.08)]" : ""
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:gap-6 sm:px-10 sm:py-4 lg:px-16">
         <a
           href="#"
-          className={`min-w-0 truncate font-display text-base tracking-[0.01em] sm:text-lg md:text-xl ${
-            onHero ? "text-candle" : "text-ink"
-          }`}
+          className="min-w-0 truncate font-display text-base tracking-[0.01em] text-candle sm:text-lg md:text-xl"
           onClick={() => setOpen(false)}
         >
           {site.name}
@@ -55,9 +49,7 @@ export function SiteHeader() {
             <a
               key={link.href}
               href={link.href}
-              className={`text-sm tracking-wide transition-colors hover:text-candle ${
-                onHero ? "text-cream" : "text-ink/70 hover:text-candle"
-              }`}
+              className="text-sm tracking-wide text-cream/80 transition-colors hover:text-candle"
             >
               {link.label}
             </a>
@@ -75,19 +67,19 @@ export function SiteHeader() {
           <span className="sr-only">{open ? "Close" : "Menu"}</span>
           <span className="relative block h-3.5 w-5">
             <span
-              className={`absolute left-0 h-px w-full transition-transform duration-300 ${
-                onHero ? "bg-cream" : "bg-ink"
-              } ${open ? "top-1.5 rotate-45" : "top-0"}`}
+              className={`absolute left-0 h-px w-full bg-cream transition-transform duration-300 ${
+                open ? "top-1.5 rotate-45" : "top-0"
+              }`}
             />
             <span
-              className={`absolute left-0 top-1.5 h-px w-full transition-opacity duration-300 ${
-                onHero ? "bg-cream" : "bg-ink"
-              } ${open ? "opacity-0" : "opacity-100"}`}
+              className={`absolute left-0 top-1.5 h-px w-full bg-cream transition-opacity duration-300 ${
+                open ? "opacity-0" : "opacity-100"
+              }`}
             />
             <span
-              className={`absolute left-0 h-px w-full transition-transform duration-300 ${
-                onHero ? "bg-cream" : "bg-ink"
-              } ${open ? "top-1.5 -rotate-45" : "top-3"}`}
+              className={`absolute left-0 h-px w-full bg-cream transition-transform duration-300 ${
+                open ? "top-1.5 -rotate-45" : "top-3"
+              }`}
             />
           </span>
         </button>
@@ -99,14 +91,14 @@ export function SiteHeader() {
       >
         <nav
           aria-label="Mobile"
-          className="border-t border-ink/10 bg-surface-a px-4 py-6 sm:px-10"
+          className="border-t border-cream/10 bg-black px-4 py-5 sm:px-10"
         >
-          <ul className="flex flex-col gap-4">
+          <ul className="mx-auto flex max-w-xs flex-col items-center gap-2.5">
             {links.map((link) => (
-              <li key={link.href}>
+              <li key={link.href} className="w-full">
                 <a
                   href={link.href}
-                  className="block py-1 font-display text-xl text-ink sm:text-2xl"
+                  className="block rounded-full border border-cream/20 px-5 py-2.5 text-center text-sm tracking-wide text-cream transition-colors hover:border-candle hover:text-candle"
                   onClick={() => setOpen(false)}
                 >
                   {link.label}

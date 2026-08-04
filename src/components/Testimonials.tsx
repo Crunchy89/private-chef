@@ -1,5 +1,6 @@
 import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
+import { TestimonialsCarousel } from "@/components/TestimonialsCarousel";
 
 const stories = [
   {
@@ -61,7 +62,7 @@ export function Testimonials() {
       id="testimonials"
       className="bg-surface-warm px-4 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24"
     >
-      <div className="mx-auto max-w-5xl text-center">
+      <div className="mx-auto max-w-6xl text-center">
         <Reveal variant="up">
           <SplitHeading
             lead="Guests"
@@ -73,76 +74,8 @@ export function Testimonials() {
           </p>
         </Reveal>
 
-        <Reveal
-          delay={1}
-          variant="fade"
-          className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2"
-        >
-          <StarRating rating={average} size="lg" />
-          <p className="text-sm text-ink/70">
-            <span className="font-medium text-ink">
-              {average.toFixed(1)} / 5
-            </span>{" "}
-            from {stories.length} guest reviews
-          </p>
-        </Reveal>
-
-        <ul className="mt-14 grid gap-12 sm:grid-cols-2 md:grid-cols-3 md:gap-x-10 md:gap-y-14">
-          {stories.map((story, index) => (
-            <Reveal
-              key={story.name}
-              as="li"
-              delay={(index % 3) as 0 | 1 | 2}
-              variant="up"
-              className="flex flex-col items-center"
-            >
-              <StarRating rating={story.rating} />
-              <blockquote className="mt-3 font-display text-lg leading-snug text-ink sm:text-xl md:text-2xl">
-                “{story.quote}”
-              </blockquote>
-              <p className="mt-3 text-sm leading-relaxed text-ink/70 sm:mt-4">
-                {story.review}
-              </p>
-              <p className="mt-4 text-sm font-medium text-ink sm:mt-5">
-                {story.name}
-              </p>
-              <p className="mt-1 text-xs text-ink/60 sm:text-sm">{story.place}</p>
-            </Reveal>
-          ))}
-        </ul>
+        <TestimonialsCarousel stories={stories} average={average} />
       </div>
     </section>
-  );
-}
-
-function StarRating({
-  rating,
-  size = "sm",
-}: {
-  rating: number;
-  size?: "sm" | "lg";
-}) {
-  const rounded = Math.round(rating);
-  const starClass = size === "lg" ? "h-5 w-5" : "h-3.5 w-3.5";
-
-  return (
-    <div
-      className="flex items-center justify-center gap-1 text-candle"
-      aria-label={`${rating.toFixed(1)} out of 5 stars`}
-    >
-      {Array.from({ length: 5 }, (_, index) => {
-        const filled = index < rounded;
-        return (
-          <svg
-            key={index}
-            aria-hidden="true"
-            viewBox="0 0 20 20"
-            className={`${starClass} ${filled ? "fill-current" : "fill-candle/25"}`}
-          >
-            <path d="M10 1.5l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.9l-4.94 2.6.94-5.5-4-3.9 5.53-.8L10 1.5z" />
-          </svg>
-        );
-      })}
-    </div>
   );
 }
