@@ -19,7 +19,7 @@ export const site = {
   ],
   whatsapp: {
     /** International format without + or spaces */
-    number: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "6281234567890",
+    number: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "6287858018811",
     defaultMessage:
       "Hi! I'd like to book Private Chef Lombok for my villa. Here are my dates, guest count, and location:",
   },
