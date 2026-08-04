@@ -1,8 +1,11 @@
 import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
-import { site } from "@/lib/site";
+import { getSiteCms } from "@/lib/site-cms";
 
-export function Location() {
+export async function Location() {
+  const content = await getSiteCms();
+  const { location } = content;
+
   return (
     <section
       id="location"
@@ -17,8 +20,8 @@ export function Location() {
             className="text-2xl leading-snug sm:text-3xl md:text-4xl lg:text-5xl"
           />
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-cream/75 sm:mt-4 sm:text-base md:text-lg">
-            {site.location.label}. Send your villa pin when you book and we
-            confirm travel for your private chef dinner.
+            {location.label}. Send your villa pin when you book and we confirm
+            travel for your private chef dinner.
           </p>
         </Reveal>
 
@@ -29,7 +32,7 @@ export function Location() {
         >
           <iframe
             title="Private Chef Lombok location map"
-            src={`https://www.google.com/maps?q=${site.location.lat},${site.location.lng}&z=13&output=embed`}
+            src={`https://www.google.com/maps?q=${location.lat},${location.lng}&z=13&output=embed`}
             className="h-[min(420px,55vh)] w-full border-0 grayscale-[20%] contrast-[1.05]"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
@@ -42,9 +45,9 @@ export function Location() {
           variant="fade"
           className="mt-6 flex flex-col items-center gap-3"
         >
-          <p className="text-sm text-cream/65">{site.location.address}</p>
+          <p className="text-sm text-cream/65">{location.address}</p>
           <a
-            href={site.location.mapsLink}
+            href={location.mapsLink}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-medium text-lagoon underline-offset-4 transition-colors hover:text-cream hover:underline"

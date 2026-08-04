@@ -1,7 +1,7 @@
 import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
 import { ReviewsCarousel } from "@/components/ReviewsCarousel";
-import { getSiteCms } from "@/lib/drive-cms";
+import { getSiteCms } from "@/lib/site-cms";
 
 export async function Reviews() {
   const content = await getSiteCms();

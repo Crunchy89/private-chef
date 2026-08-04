@@ -1,4 +1,4 @@
-import { getSiteCms } from "@/lib/drive-cms";
+import { getSiteCms } from "@/lib/site-cms";
 import { CmsImage } from "@/components/CmsImage";
 
 export async function Hero() {

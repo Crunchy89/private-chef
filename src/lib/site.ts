@@ -32,8 +32,6 @@ export const site = {
     postalCode: "83562",
     lat: -8.8956,
     lng: 116.2775,
-    mapsEmbedUrl:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15785!2d116.2775!3d-8.8956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcda1e85de0c2e7%3A0x0!2sKuta%2C%20Central%20Lombok!5e0!3m2!1sen!2sid!4v1700000000000",
     mapsLink: "https://maps.google.com/?q=Kuta,+Lombok,+Indonesia",
   },
   heroImage: "/images/hero.webp",
@@ -43,9 +41,12 @@ export const site = {
   },
 } as const;
 
-export function whatsappBookingUrl(message?: string) {
+export function whatsappBookingUrl(
+  message?: string,
+  number = site.whatsapp.number,
+) {
   const text = encodeURIComponent(message ?? site.whatsapp.defaultMessage);
-  return `https://wa.me/${site.whatsapp.number}?text=${text}`;
+  return `https://wa.me/${number}?text=${text}`;
 }
 
 export function absoluteUrl(path = "/") {

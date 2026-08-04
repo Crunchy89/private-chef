@@ -9,7 +9,7 @@ import { ReviewForm } from "@/components/ReviewForm";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Reviews } from "@/components/Reviews";
-import { getSiteCms } from "@/lib/drive-cms";
+import { getSiteCms } from "@/lib/site-cms";
 import { absoluteUrl } from "@/lib/site";
 
 /** Always refetch CMS (reviews/settings) on each request */
@@ -29,13 +29,18 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function Home() {
+export default async function Home() {
+  const content = await getSiteCms();
+
   return (
     <>
       <SiteHeader />
       <Hero />
       <main id="main-content">
-        <Experience />
+        <Experience
+          whatsappNumber={content.whatsappNumber}
+          mapsLink={content.location.mapsLink}
+        />
         <About />
         <Chef />
         <Reviews />
@@ -43,7 +48,7 @@ export default function Home() {
         <Location />
       </main>
       <SiteFooter />
-      <FloatingWidgets />
+      <FloatingWidgets whatsappNumber={content.whatsappNumber} />
     </>
   );
 }

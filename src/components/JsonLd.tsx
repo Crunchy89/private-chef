@@ -1,4 +1,4 @@
-import { absoluteMediaUrl, getSiteCms } from "@/lib/drive-cms";
+import { absoluteMediaUrl, getSiteCms } from "@/lib/site-cms";
 import { absoluteUrl, site } from "@/lib/site";
 
 export async function JsonLd() {

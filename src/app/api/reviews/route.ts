@@ -1,10 +1,23 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { getSiteCms } from "@/lib/site-cms";
 import {
-  callDriveScript,
-  getSiteCms,
-  isDriveCmsConfigured,
-} from "@/lib/drive-cms";
+  createReview,
+  deleteReview,
+  normalizeStatus,
+  updateReview,
+  type ReviewStatus,
+} from "@/lib/reviews-db";
+
+export const runtime = "nodejs";
+
+async function requireAdmin() {
+  if (!(await isAdminAuthenticated())) {
+    return NextResponse.json({ ok: false, error: "Unauthorized." }, { status: 401 });
+  }
+  return null;
+}
 
 type ReviewBody = {
   id?: string;
@@ -14,7 +27,7 @@ type ReviewBody = {
   rating?: number | string;
   review?: string;
   photo_url?: string;
-  status?: string;
+  status?: string | number | boolean;
   website?: string;
 };
 
@@ -24,32 +37,9 @@ function clean(value: unknown, max: number) {
     .slice(0, max);
 }
 
-function parseStatus(value: unknown): "show" | "hide" | null {
+function parseStatus(value: unknown): ReviewStatus | null {
   if (value == null || value === "") return null;
-  const s = String(value).trim().toLowerCase();
-  if (
-    s === "hide" ||
-    s === "hidden" ||
-    s === "no" ||
-    s === "0" ||
-    s === "false" ||
-    s === "draft" ||
-    s === "off" ||
-    s === "pending"
-  ) {
-    return "hide";
-  }
-  if (
-    s === "show" ||
-    s === "published" ||
-    s === "yes" ||
-    s === "1" ||
-    s === "true" ||
-    s === "on"
-  ) {
-    return "show";
-  }
-  return null;
+  return normalizeStatus(value, 0);
 }
 
 function parseRating(value: unknown) {
@@ -60,8 +50,9 @@ function parseRating(value: unknown) {
   return rounded;
 }
 
-function refreshCmsCache() {
+function refresh() {
   revalidatePath("/");
+  revalidatePath("/secret/admin");
 }
 
 export async function GET() {
@@ -76,13 +67,6 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!isDriveCmsConfigured()) {
-    return NextResponse.json(
-      { ok: false, error: "Review submissions are not configured." },
-      { status: 503 },
-    );
-  }
-
   let body: ReviewBody;
   try {
     body = (await request.json()) as ReviewBody;
@@ -99,6 +83,7 @@ export async function POST(request: Request) {
   const place = clean(body.place, 120);
   const review = clean(body.review, 500);
   const rating = parseRating(body.rating);
+  const isAdmin = await isAdminAuthenticated();
 
   if (!name || !quote || !rating) {
     return NextResponse.json(
@@ -108,38 +93,32 @@ export async function POST(request: Request) {
   }
 
   try {
-    const result = await callDriveScript<{ ok: boolean; id?: string }>({
-      action: "create",
+    const row = await createReview({
       name,
       quote,
       place,
       review,
       rating,
       photo_url: clean(body.photo_url, 500),
-      // New public submissions stay hidden until set to "show" in the sheet
-      status: parseStatus(body.status) ?? "hide",
+      // Public submissions stay hidden; admins can set show/hide.
+      status: isAdmin ? (parseStatus(body.status) ?? 1) : 0,
     });
-
-    refreshCmsCache();
-    return NextResponse.json({ ok: true, id: result.id });
+    refresh();
+    return NextResponse.json({ ok: true, id: row.id, status: row.status });
   } catch (error) {
     return NextResponse.json(
       {
         ok: false,
         error: error instanceof Error ? error.message : "Could not save review.",
       },
-      { status: 502 },
+      { status: 500 },
     );
   }
 }
 
 export async function PATCH(request: Request) {
-  if (!isDriveCmsConfigured()) {
-    return NextResponse.json(
-      { ok: false, error: "CMS is not configured." },
-      { status: 503 },
-    );
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
 
   let body: ReviewBody;
   try {
@@ -154,38 +133,36 @@ export async function PATCH(request: Request) {
   }
 
   try {
-    await callDriveScript({
-      action: "update",
-      id,
+    const row = await updateReview(id, {
       name: body.name != null ? clean(body.name, 80) : undefined,
       quote: body.quote != null ? clean(body.quote, 500) : undefined,
       place: body.place != null ? clean(body.place, 120) : undefined,
       review: body.review != null ? clean(body.review, 500) : undefined,
-      rating: body.rating != null ? parseRating(body.rating) : undefined,
+      rating: body.rating != null ? parseRating(body.rating) ?? undefined : undefined,
       photo_url: body.photo_url != null ? clean(body.photo_url, 500) : undefined,
       status: body.status != null ? parseStatus(body.status) ?? undefined : undefined,
     });
 
-    refreshCmsCache();
-    return NextResponse.json({ ok: true, id });
+    if (!row) {
+      return NextResponse.json({ ok: false, error: "Review not found." }, { status: 404 });
+    }
+
+    refresh();
+    return NextResponse.json({ ok: true, id: row.id, status: row.status });
   } catch (error) {
     return NextResponse.json(
       {
         ok: false,
         error: error instanceof Error ? error.message : "Could not update review.",
       },
-      { status: 502 },
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(request: Request) {
-  if (!isDriveCmsConfigured()) {
-    return NextResponse.json(
-      { ok: false, error: "CMS is not configured." },
-      { status: 503 },
-    );
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
 
   let body: ReviewBody;
   try {
@@ -200,8 +177,11 @@ export async function DELETE(request: Request) {
   }
 
   try {
-    await callDriveScript({ action: "delete", id });
-    refreshCmsCache();
+    const ok = await deleteReview(id);
+    if (!ok) {
+      return NextResponse.json({ ok: false, error: "Review not found." }, { status: 404 });
+    }
+    refresh();
     return NextResponse.json({ ok: true, id });
   } catch (error) {
     return NextResponse.json(
@@ -209,7 +189,7 @@ export async function DELETE(request: Request) {
         ok: false,
         error: error instanceof Error ? error.message : "Could not delete review.",
       },
-      { status: 502 },
+      { status: 500 },
     );
   }
 }

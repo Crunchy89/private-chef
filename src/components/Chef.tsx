@@ -1,7 +1,7 @@
 import { CmsImage } from "@/components/CmsImage";
 import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
-import { getSiteCms } from "@/lib/drive-cms";
+import { getSiteCms } from "@/lib/site-cms";
 
 export async function Chef() {
   const content = await getSiteCms();

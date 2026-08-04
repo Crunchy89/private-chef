@@ -3,7 +3,13 @@
 import { useState } from "react";
 import { site, whatsappBookingUrl } from "@/lib/site";
 
-export function FloatingWidgets() {
+type FloatingWidgetsProps = {
+  whatsappNumber?: string;
+};
+
+export function FloatingWidgets({
+  whatsappNumber = site.whatsapp.number,
+}: FloatingWidgetsProps) {
   const [copied, setCopied] = useState(false);
 
   async function handleShare() {
@@ -34,7 +40,7 @@ export function FloatingWidgets() {
   return (
     <div className="safe-fixed-widgets fixed z-50 flex flex-col items-center gap-3">
       <a
-        href={whatsappBookingUrl()}
+        href={whatsappBookingUrl(undefined, whatsappNumber)}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Book on WhatsApp"

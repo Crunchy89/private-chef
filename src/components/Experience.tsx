@@ -4,37 +4,45 @@ import { useState } from "react";
 import { Reveal } from "@/components/Reveal";
 import { site, whatsappBookingUrl } from "@/lib/site";
 
-const actions = [
-  {
-    id: "whatsapp",
-    title: "Book the chef",
-    copy: "Message us on WhatsApp with your villa location, dates, and guest count. We reply with menu options and pricing.",
-    href: whatsappBookingUrl(),
-    external: true,
-  },
-  {
-    id: "share",
-    title: "Share with hosts",
-    copy: "Send this page to friends or your villa host so they can book the same private chef service in Lombok.",
-  },
-  {
-    id: "review",
-    title: "Reviews",
-    copy: "Enjoyed your private chef dinner? Share your experience and help other guests discover us.",
-    href: "#reviews",
-    external: false,
-  },
-  {
-    id: "direction",
-    title: "Where we cook",
-    copy: "We are based in Kuta Lombok and travel to villas and holiday homes across the island.",
-    href: site.location.mapsLink,
-    external: true,
-  },
-] as const;
+type ExperienceProps = {
+  whatsappNumber?: string;
+  mapsLink?: string;
+};
 
-export function Experience() {
+export function Experience({
+  whatsappNumber = site.whatsapp.number,
+  mapsLink = site.location.mapsLink,
+}: ExperienceProps) {
   const [copied, setCopied] = useState(false);
+
+  const actions = [
+    {
+      id: "whatsapp",
+      title: "Book the chef",
+      copy: "Message us on WhatsApp with your villa location, dates, and guest count. We reply with menu options and pricing.",
+      href: whatsappBookingUrl(undefined, whatsappNumber),
+      external: true,
+    },
+    {
+      id: "share",
+      title: "Share with hosts",
+      copy: "Send this page to friends or your villa host so they can book the same private chef service in Lombok.",
+    },
+    {
+      id: "review",
+      title: "Reviews",
+      copy: "Enjoyed your private chef dinner? Share your experience and help other guests discover us.",
+      href: "#reviews",
+      external: false,
+    },
+    {
+      id: "direction",
+      title: "Where we cook",
+      copy: "We are based in Kuta Lombok and travel to villas and holiday homes across the island.",
+      href: mapsLink,
+      external: true,
+    },
+  ] as const;
 
   async function handleShare() {
     const payload = {

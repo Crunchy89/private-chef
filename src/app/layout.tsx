@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Figtree } from "next/font/google";
 import "./globals.css";
 import { JsonLd } from "@/components/JsonLd";
-import { absoluteMediaUrl, getSiteCms } from "@/lib/drive-cms";
+import { absoluteMediaUrl, getSiteCms } from "@/lib/site-cms";
 import { absoluteUrl, site } from "@/lib/site";
 
 const display = Fraunces({
