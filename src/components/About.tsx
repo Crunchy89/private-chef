@@ -3,8 +3,16 @@ import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
 import { getSiteCms } from "@/lib/site-cms";
 
+function paragraphs(body: string) {
+  return body
+    .split(/\n\s*\n/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
 export async function About() {
   const content = await getSiteCms();
+  const body = paragraphs(content.content.aboutBody);
 
   return (
     <section id="about" className="section-pad-y bg-surface-white">
@@ -28,20 +36,20 @@ export async function About() {
           className="flex flex-col justify-center px-4 text-center sm:px-10 lg:px-16 lg:text-left"
         >
           <SplitHeading
-            lead="Dining"
-            rest="at your villa, not a restaurant"
+            lead={content.content.aboutTitleLead}
+            rest={content.content.aboutTitleRest}
             className="text-2xl leading-snug sm:text-3xl md:text-4xl lg:text-5xl"
           />
-          <p className="mt-4 text-sm leading-relaxed text-ink sm:mt-5 sm:text-base md:text-lg">
-            Private Chef Lombok is an in-villa chef service. We shop, cook, and
-            plate in your holiday home so you can host dinner without leaving
-            the property.
-          </p>
-          <p className="mt-3 text-sm leading-relaxed text-ink sm:mt-4 sm:text-base md:text-lg">
-            Ideal for couples, families, and friend groups who want a personal
-            dining experience with Indonesian flavours, seafood, and flexible
-            menus built around your guests.
-          </p>
+          {body.map((para, index) => (
+            <p
+              key={index}
+              className={`text-sm leading-relaxed text-ink sm:text-base md:text-lg ${
+                index === 0 ? "mt-4 sm:mt-5" : "mt-3 sm:mt-4"
+              }`}
+            >
+              {para}
+            </p>
+          ))}
         </Reveal>
       </div>
     </section>

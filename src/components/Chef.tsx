@@ -3,8 +3,16 @@ import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
 import { getSiteCms } from "@/lib/site-cms";
 
+function paragraphs(body: string) {
+  return body
+    .split(/\n\s*\n/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
 export async function Chef() {
   const content = await getSiteCms();
+  const body = paragraphs(content.content.chefBody);
 
   return (
     <section id="chef" className="section-pad-y bg-surface-gray">
@@ -14,20 +22,20 @@ export async function Chef() {
           className="order-2 flex flex-col justify-center px-4 text-center sm:px-10 lg:order-1 lg:px-16 lg:text-left"
         >
           <SplitHeading
-            lead="What"
-            rest="our private chef service includes"
+            lead={content.content.chefTitleLead}
+            rest={content.content.chefTitleRest}
             className="text-2xl leading-snug sm:text-3xl md:text-4xl lg:text-5xl"
           />
-          <p className="mt-4 text-sm leading-relaxed text-ink sm:mt-5 sm:text-base md:text-lg">
-            Menu planning, fresh market ingredients, cooking in your kitchen,
-            plating, and clean-up. You enjoy the meal — we handle the work
-            behind it.
-          </p>
-          <p className="mt-3 text-sm leading-relaxed text-ink sm:mt-4 sm:text-base md:text-lg">
-            Share allergies, spice level, and preferences on WhatsApp. We
-            confirm availability for your Lombok dates and send a clear quote
-            before you book.
-          </p>
+          {body.map((para, index) => (
+            <p
+              key={index}
+              className={`text-sm leading-relaxed text-ink sm:text-base md:text-lg ${
+                index === 0 ? "mt-4 sm:mt-5" : "mt-3 sm:mt-4"
+              }`}
+            >
+              {para}
+            </p>
+          ))}
         </Reveal>
 
         <Reveal

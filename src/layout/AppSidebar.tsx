@@ -92,19 +92,6 @@ const AppSidebar: React.FC = () => {
               })}
             </ul>
           )}
-
-          {showLabels && (
-            <div className="mt-auto border-t border-gray-200 pt-4 dark:border-gray-800">
-              <Link
-                href="/"
-                className="menu-item menu-item-inactive"
-                target="_blank"
-                rel="noreferrer"
-              >
-                View site
-              </Link>
-            </div>
-          )}
         </nav>
       </div>
     </aside>

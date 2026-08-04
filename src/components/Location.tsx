@@ -1,5 +1,6 @@
 import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
+import { areas } from "@/lib/seo-content";
 import { getSiteCms } from "@/lib/site-cms";
 
 export async function Location() {
@@ -14,8 +15,8 @@ export async function Location() {
       <div className="mx-auto max-w-5xl text-center">
         <Reveal variant="up">
           <SplitHeading
-            lead="Service"
-            rest="area across Lombok"
+            lead={content.content.locationTitleLead}
+            rest={content.content.locationTitleRest}
             tone="dark"
             className="text-2xl leading-snug sm:text-3xl md:text-4xl lg:text-5xl"
           />
@@ -23,6 +24,23 @@ export async function Location() {
             {location.label}. Send your villa pin when you book and we confirm
             travel for your private chef dinner.
           </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            {areas.map((area) => (
+              <a
+                key={area.slug}
+                href={`/${area.slug}`}
+                className="rounded-full border border-cream/20 px-4 py-2 text-sm text-cream/85 transition-colors hover:border-candle hover:text-candle"
+              >
+                {area.name}
+              </a>
+            ))}
+            <a
+              href="/how-to-book"
+              className="rounded-full border border-cream/20 px-4 py-2 text-sm text-cream/85 transition-colors hover:border-candle hover:text-candle"
+            >
+              How to book
+            </a>
+          </div>
         </Reveal>
 
         <Reveal

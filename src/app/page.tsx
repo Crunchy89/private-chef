@@ -10,7 +10,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Reviews } from "@/components/Reviews";
 import { getSiteCms } from "@/lib/site-cms";
-import { absoluteUrl } from "@/lib/site";
+import { absoluteUrl, site } from "@/lib/site";
 
 /** Always refetch CMS (reviews/settings) on each request */
 export const dynamic = "force-dynamic";
@@ -20,11 +20,16 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: {
       absolute:
-        "Private Chef Lombok | In-Villa Chef Service in Kuta & Island-Wide",
+        "Private Chef Lombok | Hire In-Villa Chef in Kuta & Island-Wide",
     },
     description: content.description,
+    keywords: [...site.keywords],
     alternates: {
       canonical: absoluteUrl(),
+      languages: {
+        en: absoluteUrl(),
+        "x-default": absoluteUrl(),
+      },
     },
   };
 }
@@ -34,7 +39,7 @@ export default async function Home() {
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader siteName={content.name} />
       <Hero />
       <main id="main-content">
         <Experience
@@ -47,7 +52,7 @@ export default async function Home() {
         <ReviewForm />
         <Location />
       </main>
-      <SiteFooter />
+      <SiteFooter siteName={content.name} />
       <FloatingWidgets whatsappNumber={content.whatsappNumber} />
     </>
   );

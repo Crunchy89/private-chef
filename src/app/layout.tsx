@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const chef = absoluteMediaUrl(content.chefImage);
 
   const title = {
-    default: "Private Chef Lombok | In-Villa Chef Service in Kuta & Island-Wide",
+    default: "Private Chef Lombok | Hire In-Villa Chef in Kuta & Island-Wide",
     template: `%s · ${content.name}`,
   } as const;
 
@@ -47,13 +47,6 @@ export async function generateMetadata(): Promise<Metadata> {
     publisher: content.name,
     category: "Food & Dining",
     keywords: [...site.keywords],
-    alternates: {
-      canonical: absoluteUrl(),
-      languages: {
-        en: absoluteUrl(),
-        "x-default": absoluteUrl(),
-      },
-    },
     robots: {
       index: true,
       follow: true,

@@ -22,12 +22,10 @@ export async function Hero() {
             {content.name}
           </p>
           <h1 className="animate-rise-delay-1 mt-4 font-display text-[1.85rem] leading-[1.12] tracking-tight text-cream [text-shadow:0_2px_20px_rgba(0,0,0,0.7)] sm:mt-5 sm:text-5xl sm:leading-[1.05] md:text-6xl lg:text-7xl">
-            <span className="text-candle">Private chef</span> service for your
-            villa in Lombok.
+            {content.content.heroTitle}
           </h1>
           <p className="animate-rise-delay-2 mx-auto mt-4 max-w-xl text-sm leading-relaxed text-cream [text-shadow:0_2px_14px_rgba(0,0,0,0.7)] sm:mt-5 sm:text-base md:text-lg">
-            We come to your kitchen, cook a custom menu, and leave the table
-            ready for you — from Kuta Lombok to Senggigi, Mandalika, and beyond.
+            {content.content.heroSubtitle}
           </p>
           <div className="animate-rise-delay-2 mt-7 flex flex-wrap justify-center gap-3 sm:mt-9">
             <a

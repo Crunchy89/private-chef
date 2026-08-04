@@ -100,7 +100,12 @@ export async function JsonLd() {
     name: "Private Chef Villa Dining in Lombok",
     serviceType: "Private chef / in-villa dining",
     provider: { "@id": `${absoluteUrl()}/#business` },
-    areaServed: "Lombok, Indonesia",
+    areaServed: [
+      { "@type": "Place", name: "Lombok, Indonesia" },
+      { "@type": "Place", name: "Kuta Lombok", url: absoluteUrl("/kuta-lombok") },
+      { "@type": "Place", name: "Senggigi", url: absoluteUrl("/senggigi") },
+      { "@type": "Place", name: "Mandalika", url: absoluteUrl("/mandalika") },
+    ],
     description: content.description,
     url: absoluteUrl(),
   };

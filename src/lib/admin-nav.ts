@@ -5,6 +5,7 @@ export type AdminNavItem = {
 
 export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { name: "Reviews", path: "/secret/admin" },
+  { name: "Preview Site", path: "/secret/admin/preview" },
   { name: "Web Profile", path: "/secret/admin/profile" },
 ];
 

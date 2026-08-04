@@ -24,13 +24,12 @@ export async function Reviews() {
       <div className="mx-auto max-w-6xl text-center">
         <Reveal variant="up">
           <SplitHeading
-            lead="Guest"
-            rest="reviews from villa dinners in Lombok"
+            lead={content.content.reviewsTitleLead}
+            rest={content.content.reviewsTitleRest}
             className="text-2xl leading-snug sm:text-3xl md:text-4xl lg:text-5xl"
           />
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-ink sm:mt-4 sm:text-base md:text-lg">
-            Honest notes from couples, families, and villa hosts who booked our
-            private chef across Kuta, Senggigi, and the rest of Lombok.
+            {content.content.reviewsBody}
           </p>
         </Reveal>
 

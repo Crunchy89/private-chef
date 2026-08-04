@@ -1,17 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { site } from "@/lib/site";
-
 const links = [
-  { href: "#experience", label: "Experience" },
-  { href: "#about", label: "About" },
-  { href: "#chef", label: "Chef" },
-  { href: "#reviews", label: "Reviews" },
-  { href: "#location", label: "Location" },
+  { href: "/#experience", label: "Experience" },
+  { href: "/#about", label: "About" },
+  { href: "/#chef", label: "Chef" },
+  { href: "/#reviews", label: "Reviews" },
+  { href: "/#location", label: "Location" },
 ];
 
-export function SiteHeader() {
+type SiteHeaderProps = {
+  siteName: string;
+};
+
+export function SiteHeader({ siteName }: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -37,11 +39,11 @@ export function SiteHeader() {
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:gap-6 sm:px-10 sm:py-4 lg:px-16">
         <a
-          href="#"
+          href="/"
           className="min-w-0 truncate font-display text-base tracking-[0.01em] text-candle sm:text-lg md:text-xl"
           onClick={() => setOpen(false)}
         >
-          {site.name}
+          {siteName}
         </a>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">

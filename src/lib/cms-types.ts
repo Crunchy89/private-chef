@@ -15,6 +15,21 @@ export type SiteCms = {
   heroImage: string;
   aboutImage: string;
   chefImage: string;
+  content: {
+    heroTitle: string;
+    heroSubtitle: string;
+    aboutTitleLead: string;
+    aboutTitleRest: string;
+    aboutBody: string;
+    chefTitleLead: string;
+    chefTitleRest: string;
+    chefBody: string;
+    reviewsTitleLead: string;
+    reviewsTitleRest: string;
+    reviewsBody: string;
+    locationTitleLead: string;
+    locationTitleRest: string;
+  };
   reviews: Array<{
     quote: string;
     name: string;
