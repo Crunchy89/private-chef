@@ -6,11 +6,13 @@ import { site, whatsappBookingUrl } from "@/lib/site";
 
 type ExperienceProps = {
   whatsappNumber?: string;
+  whatsappMessage?: string;
   mapsLink?: string;
 };
 
 export function Experience({
   whatsappNumber = site.whatsapp.number,
+  whatsappMessage = site.whatsapp.defaultMessage,
   mapsLink = site.location.mapsLink,
 }: ExperienceProps) {
   const [copied, setCopied] = useState(false);
@@ -20,7 +22,7 @@ export function Experience({
       id: "whatsapp",
       title: "Book the chef",
       copy: "Message us on WhatsApp with your villa location, dates, and guest count. Hire a private chef in Lombok in a few messages.",
-      href: whatsappBookingUrl(undefined, whatsappNumber),
+      href: whatsappBookingUrl(whatsappMessage, whatsappNumber),
       external: true,
     },
     {

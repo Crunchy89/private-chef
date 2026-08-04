@@ -55,6 +55,7 @@ export default async function AreaPage({ params }: PageProps) {
       area={area}
       siteName={content.name}
       whatsappNumber={content.whatsappNumber}
+      whatsappMessage={content.whatsappMessage}
     />
   );
 }

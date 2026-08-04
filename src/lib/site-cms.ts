@@ -35,7 +35,8 @@ export const getSiteCms = cache(async (): Promise<SiteCms> => {
     tagline: site.tagline,
     description: site.description,
     whatsappNumber: settings.whatsapp_number || site.whatsapp.number,
-    whatsappMessage: site.whatsapp.defaultMessage,
+    whatsappMessage:
+      settings.whatsapp_message || site.whatsapp.defaultMessage,
     location: {
       label: settings.location_label || site.location.label,
       address: settings.location_address || site.location.address,

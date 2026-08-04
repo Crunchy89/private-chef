@@ -5,10 +5,12 @@ import { site, whatsappBookingUrl } from "@/lib/site";
 
 type FloatingWidgetsProps = {
   whatsappNumber?: string;
+  whatsappMessage?: string;
 };
 
 export function FloatingWidgets({
   whatsappNumber = site.whatsapp.number,
+  whatsappMessage = site.whatsapp.defaultMessage,
 }: FloatingWidgetsProps) {
   const [copied, setCopied] = useState(false);
 
@@ -40,7 +42,7 @@ export function FloatingWidgets({
   return (
     <div className="safe-fixed-widgets fixed z-50 flex flex-col items-center gap-3">
       <a
-        href={whatsappBookingUrl(undefined, whatsappNumber)}
+        href={whatsappBookingUrl(whatsappMessage, whatsappNumber)}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Book on WhatsApp"

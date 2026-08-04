@@ -31,6 +31,7 @@ export async function GET() {
     username: admin?.username ?? "admin",
     settings: {
       whatsapp_number: settings.whatsapp_number,
+      whatsapp_message: settings.whatsapp_message,
       location_label: settings.location_label,
       location_address: settings.location_address,
       location_lat: settings.location_lat,
@@ -48,6 +49,7 @@ export async function PATCH(request: Request) {
     username?: string;
     password?: string;
     whatsapp_number?: string;
+    whatsapp_message?: string;
     location_label?: string;
     location_address?: string;
     location_lat?: number | string;
@@ -80,6 +82,7 @@ export async function PATCH(request: Request) {
 
     if (
       body.whatsapp_number != null ||
+      body.whatsapp_message != null ||
       body.location_label != null ||
       body.location_address != null ||
       lat != null ||
@@ -88,6 +91,7 @@ export async function PATCH(request: Request) {
     ) {
       await updateSiteSettings({
         whatsapp_number: body.whatsapp_number,
+        whatsapp_message: body.whatsapp_message,
         location_label: body.location_label,
         location_address: body.location_address,
         location_lat: lat,
@@ -109,6 +113,7 @@ export async function PATCH(request: Request) {
       username: admin?.username ?? "admin",
       settings: {
         whatsapp_number: settings.whatsapp_number,
+        whatsapp_message: settings.whatsapp_message,
         location_label: settings.location_label,
         location_address: settings.location_address,
         location_lat: settings.location_lat,

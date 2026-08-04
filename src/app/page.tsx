@@ -44,6 +44,7 @@ export default async function Home() {
       <main id="main-content">
         <Experience
           whatsappNumber={content.whatsappNumber}
+          whatsappMessage={content.whatsappMessage}
           mapsLink={content.location.mapsLink}
         />
         <About />
@@ -53,7 +54,10 @@ export default async function Home() {
         <Location />
       </main>
       <SiteFooter siteName={content.name} />
-      <FloatingWidgets whatsappNumber={content.whatsappNumber} />
+      <FloatingWidgets
+        whatsappNumber={content.whatsappNumber}
+        whatsappMessage={content.whatsappMessage}
+      />
     </>
   );
 }

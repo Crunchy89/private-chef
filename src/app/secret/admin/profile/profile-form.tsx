@@ -8,6 +8,7 @@ import Button from "@/components/ui/button/Button";
 type ProfileFormProps = {
   username: string;
   whatsappNumber: string;
+  whatsappMessage: string;
   locationLabel: string;
   locationAddress: string;
   locationLat: number;
@@ -21,6 +22,9 @@ export function WebProfileForm(props: ProfileFormProps) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState(props.whatsappNumber);
+  const [whatsappMessage, setWhatsappMessage] = useState(
+    () => props.whatsappMessage,
+  );
   const [locationLabel, setLocationLabel] = useState(props.locationLabel);
   const [locationAddress, setLocationAddress] = useState(props.locationAddress);
   const [locationLat, setLocationLat] = useState(String(props.locationLat));
@@ -49,6 +53,7 @@ export function WebProfileForm(props: ProfileFormProps) {
           username,
           password: password || undefined,
           whatsapp_number: whatsappNumber,
+          whatsapp_message: whatsappMessage,
           location_label: locationLabel,
           location_address: locationAddress,
           location_lat: locationLat,
@@ -133,20 +138,39 @@ export function WebProfileForm(props: ProfileFormProps) {
           WhatsApp
         </h2>
         <p className="mt-1 text-theme-sm text-gray-500 dark:text-gray-400">
-          International number without + or spaces. Used for booking buttons on
-          the website.
+          Number and first message used when guests tap booking buttons on the
+          website.
         </p>
-        <div className="mt-5 max-w-md">
-          <Field label="WhatsApp number">
-            <input
-              className={inputClass}
-              value={whatsappNumber}
-              onChange={(e) => setWhatsappNumber(e.target.value)}
-              inputMode="numeric"
-              placeholder="6287858018811"
+        <div className="mt-5 space-y-4">
+          <div className="max-w-md">
+            <Field label="WhatsApp number">
+              <input
+                className={inputClass}
+                value={whatsappNumber}
+                onChange={(e) => setWhatsappNumber(e.target.value)}
+                inputMode="numeric"
+                placeholder="6287858018811"
+                required
+              />
+            </Field>
+            <p className="mt-1.5 text-theme-xs text-gray-500 dark:text-gray-400">
+              International number without + or spaces.
+            </p>
+          </div>
+          <Field label="First message">
+            <textarea
+              className={textareaClass}
+              rows={4}
+              name="whatsapp_message"
+              value={whatsappMessage}
+              onChange={(e) => setWhatsappMessage(e.target.value)}
               required
             />
           </Field>
+          <p className="text-theme-xs text-gray-500 dark:text-gray-400">
+            Pre-filled text in WhatsApp when a guest starts a chat from the
+            site.
+          </p>
         </div>
       </section>
 

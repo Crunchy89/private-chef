@@ -19,6 +19,7 @@ export type AdminUser = {
 export type SiteSettings = SiteContentFields & {
   id: string;
   whatsapp_number: string;
+  whatsapp_message: string;
   location_label: string;
   location_address: string;
   location_lat: number;
@@ -77,6 +78,7 @@ export function contentDefaults(): SiteContentFields {
 function defaults(): Omit<SiteSettings, "id" | "updated_at"> {
   return {
     whatsapp_number: site.whatsapp.number,
+    whatsapp_message: site.whatsapp.defaultMessage,
     location_label: site.location.label,
     location_address: site.location.address,
     location_lat: site.location.lat,
@@ -84,6 +86,22 @@ function defaults(): Omit<SiteSettings, "id" | "updated_at"> {
     maps_link: site.location.mapsLink,
     ...contentDefaults(),
   };
+}
+
+async function ensureWhatsAppMessageColumn() {
+  const db = getTurso();
+  const info = await db.execute(`PRAGMA table_info(site_settings)`);
+  const existing = new Set(info.rows.map((row) => String(row.name)));
+  if (!existing.has("whatsapp_message")) {
+    await db.execute(
+      `ALTER TABLE site_settings ADD COLUMN whatsapp_message TEXT NOT NULL DEFAULT ''`,
+    );
+  }
+  await db.execute({
+    sql: `UPDATE site_settings SET whatsapp_message = ?
+          WHERE id = 'default' AND (whatsapp_message IS NULL OR whatsapp_message = '')`,
+    args: [site.whatsapp.defaultMessage],
+  });
 }
 
 async function ensureContentColumns() {
@@ -184,6 +202,7 @@ export async function ensureAdminSchema() {
       );
 
       await ensureContentColumns();
+      await ensureWhatsAppMessageColumn();
 
       const users = await db.execute(`SELECT COUNT(*) AS n FROM admin_users`);
       if (Number(users.rows[0]?.n ?? 0) === 0) {
@@ -244,8 +263,9 @@ export async function ensureAdminSchema() {
     })();
   }
   await globalForAdmin.__privateChefAdminReady;
-  // Always migrate content columns (covers hot-reload / older DBs).
+  // Always migrate columns (covers hot-reload / older DBs).
   await ensureContentColumns();
+  await ensureWhatsAppMessageColumn();
 }
 
 function pickText(
@@ -262,6 +282,8 @@ function mapSettings(row: Record<string, unknown>): SiteSettings {
   return {
     id: String(row.id ?? "default"),
     whatsapp_number: String(row.whatsapp_number ?? d.whatsapp_number),
+    whatsapp_message:
+      String(row.whatsapp_message ?? "").trim() || d.whatsapp_message,
     location_label: String(row.location_label ?? d.location_label),
     location_address: String(row.location_address ?? d.location_address),
     location_lat: Number(row.location_lat ?? d.location_lat),
@@ -293,7 +315,7 @@ function mapSettings(row: Record<string, unknown>): SiteSettings {
   };
 }
 
-const SETTINGS_SELECT = `SELECT id, whatsapp_number, location_label, location_address, location_lat, location_lng, maps_link,
+const SETTINGS_SELECT = `SELECT id, whatsapp_number, whatsapp_message, location_label, location_address, location_lat, location_lng, maps_link,
   site_name, hero_title, hero_subtitle,
   about_title_lead, about_title_rest, about_body,
   chef_title_lead, chef_title_rest, chef_body,
@@ -325,6 +347,7 @@ function cleanText(value: string, max: number) {
 export async function updateSiteSettings(
   patch: Partial<{
     whatsapp_number: string;
+    whatsapp_message: string;
     location_label: string;
     location_address: string;
     location_lat: number;
@@ -340,6 +363,10 @@ export async function updateSiteSettings(
       patch.whatsapp_number != null
         ? cleanWhatsApp(patch.whatsapp_number)
         : current.whatsapp_number,
+    whatsapp_message:
+      patch.whatsapp_message != null
+        ? cleanText(patch.whatsapp_message, 1000)
+        : current.whatsapp_message,
     location_label:
       patch.location_label != null
         ? cleanText(patch.location_label, 200)
@@ -421,7 +448,7 @@ export async function updateSiteSettings(
 
   await getTurso().execute({
     sql: `UPDATE site_settings SET
-      whatsapp_number = ?, location_label = ?, location_address = ?,
+      whatsapp_number = ?, whatsapp_message = ?, location_label = ?, location_address = ?,
       location_lat = ?, location_lng = ?, maps_link = ?,
       site_name = ?, hero_title = ?, hero_subtitle = ?,
       about_title_lead = ?, about_title_rest = ?, about_body = ?,
@@ -431,6 +458,7 @@ export async function updateSiteSettings(
      WHERE id = 'default'`,
     args: [
       next.whatsapp_number,
+      next.whatsapp_message,
       next.location_label,
       next.location_address,
       next.location_lat,

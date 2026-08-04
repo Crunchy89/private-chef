@@ -32,7 +32,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HowToBookPage() {
   const content = await getSiteCms();
-  const wa = whatsappBookingUrl(undefined, content.whatsappNumber);
+  const wa = whatsappBookingUrl(
+    content.whatsappMessage,
+    content.whatsappNumber,
+  );
 
   const howToSchema = {
     "@context": "https://schema.org",
@@ -122,7 +125,10 @@ export default async function HowToBookPage() {
         </section>
       </main>
       <SiteFooter siteName={content.name} />
-      <FloatingWidgets whatsappNumber={content.whatsappNumber} />
+      <FloatingWidgets
+        whatsappNumber={content.whatsappNumber}
+        whatsappMessage={content.whatsappMessage}
+      />
     </>
   );
 }

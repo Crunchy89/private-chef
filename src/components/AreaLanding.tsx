@@ -9,17 +9,16 @@ type AreaLandingProps = {
   area: AreaPage;
   siteName: string;
   whatsappNumber: string;
+  whatsappMessage: string;
 };
 
 export function AreaLanding({
   area,
   siteName,
   whatsappNumber,
+  whatsappMessage,
 }: AreaLandingProps) {
-  const wa = whatsappBookingUrl(
-    `Hi! I'd like to book a private chef for a villa in ${area.name}. Here are my dates, guest count, and location:`,
-    whatsappNumber,
-  );
+  const wa = whatsappBookingUrl(whatsappMessage, whatsappNumber);
   const others = areas.filter((item) => item.slug !== area.slug);
 
   return (
@@ -123,7 +122,10 @@ export function AreaLanding({
         </section>
       </main>
       <SiteFooter siteName={siteName} />
-      <FloatingWidgets whatsappNumber={whatsappNumber} />
+      <FloatingWidgets
+        whatsappNumber={whatsappNumber}
+        whatsappMessage={whatsappMessage}
+      />
     </>
   );
 }
