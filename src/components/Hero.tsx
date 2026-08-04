@@ -1,15 +1,16 @@
-import Image from "next/image";
-import { site } from "@/lib/site";
+import { getSiteCms } from "@/lib/drive-cms";
+import { CmsImage } from "@/components/CmsImage";
 
-export function Hero() {
+export async function Hero() {
+  const content = await getSiteCms();
+
   return (
     <section className="relative min-h-[100svh] overflow-hidden">
-      <Image
-        src={site.heroImage}
+      <CmsImage
+        src={content.heroImage}
         alt="Private chef dinner service at a villa in Lombok"
         fill
         priority
-        sizes="100vw"
         className="animate-drift object-cover object-center brightness-[0.85]"
       />
       <div className="animate-veil absolute inset-0 bg-gradient-to-b from-black/40 via-black/15 to-transparent" />
@@ -18,7 +19,7 @@ export function Hero() {
       <div className="relative z-10 flex min-h-[100svh] flex-col items-center justify-end px-4 pb-14 pt-24 text-center sm:px-10 sm:pb-16 sm:pt-28 lg:px-16 lg:pb-24">
         <div className="max-w-3xl">
           <p className="animate-rise font-display text-xl tracking-[0.02em] text-candle [text-shadow:0_2px_16px_rgba(0,0,0,0.65)] sm:text-3xl md:text-4xl">
-            {site.name}
+            {content.name}
           </p>
           <h1 className="animate-rise-delay-1 mt-4 font-display text-[1.85rem] leading-[1.12] tracking-tight text-cream [text-shadow:0_2px_20px_rgba(0,0,0,0.7)] sm:mt-5 sm:text-5xl sm:leading-[1.05] md:text-6xl lg:text-7xl">
             <span className="text-candle">Private chef</span> service for your

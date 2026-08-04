@@ -14,6 +14,7 @@ export type ReviewCard = {
 type TestimonialsCarouselProps = {
   stories: ReviewCard[];
   average: number;
+  count: number;
 };
 
 function getVisibleCount(width: number) {
@@ -25,8 +26,9 @@ function getVisibleCount(width: number) {
 export function TestimonialsCarousel({
   stories,
   average,
+  count,
 }: TestimonialsCarouselProps) {
-  const [visible, setVisible] = useState(3);
+  const [visible, setVisible] = useState(1);
   const [index, setIndex] = useState(0);
   const [offset, setOffset] = useState(0);
   const [animate, setAnimate] = useState(true);
@@ -34,6 +36,9 @@ export function TestimonialsCarousel({
   const settling = useRef(false);
 
   const total = stories.length;
+  // Don't show empty duplicate slots — never request more columns than reviews
+  const columns = Math.max(1, Math.min(visible, total || 1));
+  const loop = total > columns;
 
   useEffect(() => {
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -54,27 +59,33 @@ export function TestimonialsCarousel({
   // Keep a middle copy of the list so we can slide continuously, then snap
   useEffect(() => {
     if (total === 0) return;
+    if (!loop) {
+      setOffset(0);
+      setIndex(0);
+      setAnimate(false);
+      return;
+    }
     setOffset(total + index);
     setAnimate(false);
-  }, [total, visible]);
+  }, [total, columns, loop]);
 
   const goNext = useCallback(() => {
-    if (total === 0 || settling.current) return;
+    if (!loop || settling.current) return;
     setAnimate(true);
     setOffset((value) => value + 1);
     setIndex((value) => (value + 1) % total);
-  }, [total]);
+  }, [loop, total]);
 
   const goPrev = useCallback(() => {
-    if (total === 0 || settling.current) return;
+    if (!loop || settling.current) return;
     setAnimate(true);
     setOffset((value) => value - 1);
     setIndex((value) => (value - 1 + total) % total);
-  }, [total]);
+  }, [loop, total]);
 
   const goTo = useCallback(
     (next: number) => {
-      if (total === 0 || settling.current) return;
+      if (!loop || settling.current) return;
       const target = ((next % total) + total) % total;
       const delta = target - index;
       if (delta === 0) return;
@@ -82,11 +93,11 @@ export function TestimonialsCarousel({
       setOffset((value) => value + delta);
       setIndex(target);
     },
-    [index, total],
+    [index, loop, total],
   );
 
   function handleTransitionEnd() {
-    if (total === 0) return;
+    if (!loop) return;
     // Snap back to the middle copy without a visible jump
     const normalized = total + index;
     if (offset !== normalized) {
@@ -99,8 +110,8 @@ export function TestimonialsCarousel({
     }
   }
 
-  const track = total === 0 ? [] : [...stories, ...stories, ...stories];
-  const stepPercent = 100 / visible;
+  const track = loop ? [...stories, ...stories, ...stories] : stories;
+  const stepPercent = 100 / columns;
 
   return (
     <>
@@ -112,13 +123,13 @@ export function TestimonialsCarousel({
         <StarRating rating={average} size="lg" />
         <p className="text-sm text-ink/70">
           <span className="font-medium text-ink">{average.toFixed(1)} / 5</span>{" "}
-          from {stories.length} guest review{stories.length === 1 ? "" : "s"}
+          from {count} guest review{count === 1 ? "" : "s"}
         </p>
       </Reveal>
 
       <div className="mt-12 sm:mt-14">
         <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
-          {total > 1 && (
+          {loop && (
             <CarouselButton
               label="Previous review"
               direction="prev"
@@ -172,7 +183,7 @@ export function TestimonialsCarousel({
             </div>
           </div>
 
-          {total > 1 && (
+          {loop && (
             <CarouselButton
               label="Next review"
               direction="next"
@@ -181,7 +192,7 @@ export function TestimonialsCarousel({
           )}
         </div>
 
-        {total > 1 && (
+        {loop && (
           <div
             className="mt-8 flex flex-wrap items-center justify-center gap-2"
             role="tablist"

@@ -1,8 +1,11 @@
-import Image from "next/image";
+import { CmsImage } from "@/components/CmsImage";
 import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
+import { getSiteCms } from "@/lib/drive-cms";
 
-export function About() {
+export async function About() {
+  const content = await getSiteCms();
+
   return (
     <section id="about" className="bg-surface-white">
       <div className="mx-auto grid max-w-6xl items-center lg:grid-cols-2">
@@ -10,13 +13,12 @@ export function About() {
           variant="left"
           className="relative flex min-h-[320px] w-full items-center justify-center sm:min-h-[420px] lg:min-h-[560px]"
         >
-          <Image
-            src="/images/img1.png"
+          <CmsImage
+            src={content.aboutImage}
             alt="Guests enjoying a private chef dinner in a Lombok villa"
             fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-contain object-center p-4 sm:p-6"
             priority
+            className="object-contain object-center p-4 sm:p-6"
           />
         </Reveal>
 

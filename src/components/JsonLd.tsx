@@ -1,39 +1,29 @@
+import { absoluteMediaUrl, getSiteCms } from "@/lib/drive-cms";
 import { absoluteUrl, site } from "@/lib/site";
 
-export function JsonLd() {
+export async function JsonLd() {
+  const content = await getSiteCms();
+  const hero = absoluteMediaUrl(content.heroImage);
+  const about = absoluteMediaUrl(content.aboutImage);
+  const chef = absoluteMediaUrl(content.chefImage);
+
   const business = {
     "@context": "https://schema.org",
     "@type": ["FoodService", "LocalBusiness"],
     "@id": `${absoluteUrl()}/#business`,
-    name: site.name,
+    name: content.name,
     alternateName: "Private Chef in Lombok",
-    description: site.description,
+    description: content.description,
     url: absoluteUrl(),
-    image: [
-      absoluteUrl(site.heroImage),
-      absoluteUrl(site.images.about),
-      absoluteUrl(site.images.chef),
-    ],
-    telephone: `+${site.whatsapp.number}`,
+    image: [hero, about, chef],
+    telephone: `+${content.whatsappNumber}`,
     priceRange: "$$",
     servesCuisine: ["Indonesian", "Seafood", "Contemporary"],
     areaServed: [
-      {
-        "@type": "Place",
-        name: "Lombok, Indonesia",
-      },
-      {
-        "@type": "Place",
-        name: "Kuta Lombok",
-      },
-      {
-        "@type": "Place",
-        name: "Senggigi",
-      },
-      {
-        "@type": "Place",
-        name: "Mandalika",
-      },
+      { "@type": "Place", name: "Lombok, Indonesia" },
+      { "@type": "Place", name: "Kuta Lombok" },
+      { "@type": "Place", name: "Senggigi" },
+      { "@type": "Place", name: "Mandalika" },
     ],
     address: {
       "@type": "PostalAddress",
@@ -66,15 +56,15 @@ export function JsonLd() {
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "reservations",
-      telephone: `+${site.whatsapp.number}`,
+      telephone: `+${content.whatsappNumber}`,
       availableLanguage: ["English", "Indonesian"],
-      url: whatsappSchemaUrl(),
+      url: `https://wa.me/${content.whatsappNumber}`,
     },
-    sameAs: [whatsappSchemaUrl()],
+    sameAs: [`https://wa.me/${content.whatsappNumber}`],
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: "4.8",
-      reviewCount: "6",
+      ratingValue: content.average.toFixed(1),
+      reviewCount: String(content.count || 1),
       bestRating: "5",
       worstRating: "1",
     },
@@ -84,9 +74,9 @@ export function JsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": `${absoluteUrl()}/#website`,
-    name: site.name,
+    name: content.name,
     url: absoluteUrl(),
-    description: site.description,
+    description: content.description,
     inLanguage: "en",
     publisher: { "@id": `${absoluteUrl()}/#business` },
   };
@@ -96,11 +86,11 @@ export function JsonLd() {
     "@type": "WebPage",
     "@id": `${absoluteUrl()}/#webpage`,
     url: absoluteUrl(),
-    name: `${site.name} — Private Chef & Villa Dining in Lombok`,
-    description: site.description,
+    name: `${content.name} — Private Chef & Villa Dining in Lombok`,
+    description: content.description,
     isPartOf: { "@id": `${absoluteUrl()}/#website` },
     about: { "@id": `${absoluteUrl()}/#business` },
-    primaryImageOfPage: absoluteUrl(site.heroImage),
+    primaryImageOfPage: hero,
     inLanguage: "en",
   };
 
@@ -111,7 +101,7 @@ export function JsonLd() {
     serviceType: "Private chef / in-villa dining",
     provider: { "@id": `${absoluteUrl()}/#business` },
     areaServed: "Lombok, Indonesia",
-    description: site.description,
+    description: content.description,
     url: absoluteUrl(),
   };
 
@@ -126,8 +116,4 @@ export function JsonLd() {
       dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
     />
   );
-}
-
-function whatsappSchemaUrl() {
-  return `https://wa.me/${site.whatsapp.number}`;
 }

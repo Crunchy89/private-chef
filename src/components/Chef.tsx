@@ -1,8 +1,11 @@
-import Image from "next/image";
+import { CmsImage } from "@/components/CmsImage";
 import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
+import { getSiteCms } from "@/lib/drive-cms";
 
-export function Chef() {
+export async function Chef() {
+  const content = await getSiteCms();
+
   return (
     <section id="chef" className="bg-surface-gray">
       <div className="mx-auto grid max-w-6xl items-center lg:grid-cols-2">
@@ -32,11 +35,10 @@ export function Chef() {
           delay={1}
           className="relative order-1 flex min-h-[320px] w-full items-center justify-center sm:min-h-[420px] lg:order-2 lg:min-h-[560px]"
         >
-          <Image
-            src="/images/img2.png"
+          <CmsImage
+            src={content.chefImage}
             alt="Private chef preparing a plated dish for villa dining in Lombok"
             fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-contain object-center p-4 sm:p-6"
           />
         </Reveal>

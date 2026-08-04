@@ -5,21 +5,29 @@ import { Experience } from "@/components/Experience";
 import { FloatingWidgets } from "@/components/FloatingWidgets";
 import { Hero } from "@/components/Hero";
 import { Location } from "@/components/Location";
+import { ReviewForm } from "@/components/ReviewForm";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Testimonials } from "@/components/Testimonials";
-import { absoluteUrl, site } from "@/lib/site";
+import { getSiteCms } from "@/lib/drive-cms";
+import { absoluteUrl } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: {
-    absolute:
-      "Private Chef Lombok | In-Villa Chef Service in Kuta & Island-Wide",
-  },
-  description: site.description,
-  alternates: {
-    canonical: absoluteUrl(),
-  },
-};
+/** Always refetch CMS (reviews/settings) on each request */
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getSiteCms();
+  return {
+    title: {
+      absolute:
+        "Private Chef Lombok | In-Villa Chef Service in Kuta & Island-Wide",
+    },
+    description: content.description,
+    alternates: {
+      canonical: absoluteUrl(),
+    },
+  };
+}
 
 export default function Home() {
   return (
@@ -31,6 +39,7 @@ export default function Home() {
         <About />
         <Chef />
         <Testimonials />
+        <ReviewForm />
         <Location />
       </main>
       <SiteFooter />
