@@ -116,83 +116,93 @@ export function TestimonialsCarousel({
         </p>
       </Reveal>
 
-      <div className="relative mt-12 sm:mt-14">
-        <div className="overflow-hidden">
-          <div
-            className="flex ease-out"
-            onTransitionEnd={handleTransitionEnd}
-            style={{
-              transform: `translateX(-${offset * stepPercent}%)`,
-              transitionProperty: "transform",
-              transitionDuration:
-                animate && !reducedMotion ? "500ms" : "0ms",
-            }}
-          >
-            {track.map((story, trackIndex) => (
-              <article
-                key={`${trackIndex}-${story.name}`}
-                className="box-border flex shrink-0 flex-col px-2"
-                style={{ width: `${stepPercent}%` }}
-              >
-                <div className="flex h-full flex-col rounded-2xl border border-ink/10 bg-surface-white p-5 text-left shadow-[0_8px_24px_rgba(42,33,24,0.06)] sm:p-6">
-                  <StarRating rating={story.rating} className="justify-start" />
-                  <blockquote className="mt-4 flex-1 font-display text-base leading-snug text-ink sm:text-lg">
-                    “{story.quote}”
-                  </blockquote>
-                  {story.review && (
-                    <p className="mt-3 text-sm leading-relaxed text-ink/70">
-                      {story.review}
-                    </p>
-                  )}
-                  <div className="mt-5 border-t border-ink/8 pt-4">
-                    <p className="text-sm font-medium text-ink">{story.name}</p>
-                    <p className="mt-0.5 text-xs text-ink/60 sm:text-sm">
-                      {story.place}
-                    </p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-
-        {total > 1 && (
-          <>
+      <div className="mt-12 sm:mt-14">
+        <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+          {total > 1 && (
             <CarouselButton
               label="Previous review"
               direction="prev"
               onClick={goPrev}
-              className="-left-1 sm:-left-4 lg:-left-5"
             />
+          )}
+
+          <div
+            className="min-w-0 flex-1 overflow-hidden"
+            style={{ backgroundColor: "var(--surface-warm)" }}
+          >
+            <div
+              className="flex py-3 ease-out"
+              onTransitionEnd={handleTransitionEnd}
+              style={{
+                backgroundColor: "var(--surface-warm)",
+                transform: `translateX(-${offset * stepPercent}%)`,
+                transitionProperty: "transform",
+                transitionDuration:
+                  animate && !reducedMotion ? "500ms" : "0ms",
+              }}
+            >
+              {track.map((story, trackIndex) => (
+                <article
+                  key={`${trackIndex}-${story.name}`}
+                  className="box-border flex shrink-0 flex-col px-1.5 sm:px-2"
+                  style={{
+                    width: `${stepPercent}%`,
+                    backgroundColor: "var(--surface-warm)",
+                  }}
+                >
+                  <div className="flex h-full flex-col rounded-2xl border border-ink/10 bg-surface-white p-5 text-left sm:p-6">
+                    <StarRating rating={story.rating} className="justify-start" />
+                    <blockquote className="mt-4 flex-1 font-display text-base leading-snug text-ink sm:text-lg">
+                      “{story.quote}”
+                    </blockquote>
+                    {story.review && (
+                      <p className="mt-3 text-sm leading-relaxed text-ink/70">
+                        {story.review}
+                      </p>
+                    )}
+                    <div className="mt-5 border-t border-ink/8 pt-4">
+                      <p className="text-sm font-medium text-ink">{story.name}</p>
+                      <p className="mt-0.5 text-xs text-ink/60 sm:text-sm">
+                        {story.place}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          {total > 1 && (
             <CarouselButton
               label="Next review"
               direction="next"
               onClick={goNext}
-              className="-right-1 sm:-right-4 lg:-right-5"
             />
+          )}
+        </div>
 
-            <div
-              className="mt-8 flex flex-wrap items-center justify-center gap-2"
-              role="tablist"
-              aria-label="Review cards"
-            >
-              {stories.map((_, dotIndex) => (
-                <button
-                  key={dotIndex}
-                  type="button"
-                  role="tab"
-                  aria-selected={dotIndex === index}
-                  aria-label={`Go to review ${dotIndex + 1} of ${total}`}
-                  onClick={() => goTo(dotIndex)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    dotIndex === index
-                      ? "w-6 bg-candle"
-                      : "w-2 bg-ink/20 hover:bg-ink/35"
-                  }`}
-                />
-              ))}
-            </div>
-          </>
+        {total > 1 && (
+          <div
+            className="mt-8 flex flex-wrap items-center justify-center gap-2"
+            role="tablist"
+            aria-label="Review cards"
+          >
+            {stories.map((_, dotIndex) => (
+              <button
+                key={dotIndex}
+                type="button"
+                role="tab"
+                aria-selected={dotIndex === index}
+                aria-label={`Go to review ${dotIndex + 1} of ${total}`}
+                onClick={() => goTo(dotIndex)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  dotIndex === index
+                    ? "w-6 bg-candle"
+                    : "w-2 bg-ink/20 hover:bg-ink/35"
+                }`}
+              />
+            ))}
+          </div>
         )}
       </div>
     </>
@@ -203,19 +213,17 @@ function CarouselButton({
   label,
   direction,
   onClick,
-  className,
 }: {
   label: string;
   direction: "prev" | "next";
   onClick: () => void;
-  className: string;
 }) {
   return (
     <button
       type="button"
       aria-label={label}
       onClick={onClick}
-      className={`absolute top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-ink/10 bg-surface-white text-ink shadow-md transition-colors hover:border-candle hover:text-candle sm:h-11 sm:w-11 ${className}`}
+      className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink/10 bg-surface-white text-ink shadow-md transition-colors hover:border-candle hover:text-candle sm:h-11 sm:w-11"
     >
       <svg
         aria-hidden="true"

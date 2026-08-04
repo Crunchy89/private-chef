@@ -61,6 +61,7 @@ export function Testimonials() {
     <section
       id="testimonials"
       className="bg-surface-warm px-4 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24"
+      style={{ backgroundColor: "var(--surface-warm)" }}
     >
       <div className="mx-auto max-w-6xl text-center">
         <Reveal variant="up">
