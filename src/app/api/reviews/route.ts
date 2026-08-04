@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import {
+  clientIpFromRequest,
+  consumeReviewSubmitSlot,
+} from "@/lib/rate-limit";
 import { getSiteCms } from "@/lib/site-cms";
 import {
   createReview,
@@ -67,6 +71,29 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const isAdmin = await isAdminAuthenticated();
+
+  // Public submits: 5 per IP every 5 minutes (stored in Turso).
+  if (!isAdmin) {
+    const slot = await consumeReviewSubmitSlot(clientIpFromRequest(request));
+    if (!slot.allowed) {
+      const minutes = Math.max(1, Math.ceil(slot.retryAfterSec / 60));
+      return NextResponse.json(
+        {
+          ok: false,
+          error: `Too many reviews. Please wait about ${minutes} minute${minutes === 1 ? "" : "s"} before trying again.`,
+          retryAfterSec: slot.retryAfterSec,
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(slot.retryAfterSec),
+          },
+        },
+      );
+    }
+  }
+
   let body: ReviewBody;
   try {
     body = (await request.json()) as ReviewBody;
@@ -83,7 +110,6 @@ export async function POST(request: Request) {
   const place = clean(body.place, 120);
   const review = clean(body.review, 500);
   const rating = parseRating(body.rating);
-  const isAdmin = await isAdminAuthenticated();
 
   if (!name || !quote || !rating) {
     return NextResponse.json(

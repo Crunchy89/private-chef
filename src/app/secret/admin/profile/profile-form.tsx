@@ -2,8 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Alert, Field, inputClass, textareaClass } from "@/components/form";
+import { Field, inputClass, textareaClass } from "@/components/form";
+import { Tooltip } from "@/components/Tooltip";
 import Button from "@/components/ui/button/Button";
+import { useNotifyTooltip } from "@/hooks/useNotifyTooltip";
 
 type ProfileFormProps = {
   username: string;
@@ -18,6 +20,7 @@ type ProfileFormProps = {
 
 export function WebProfileForm(props: ProfileFormProps) {
   const router = useRouter();
+  const notice = useNotifyTooltip();
   const [username, setUsername] = useState(props.username);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -30,17 +33,14 @@ export function WebProfileForm(props: ProfileFormProps) {
   const [locationLat, setLocationLat] = useState(String(props.locationLat));
   const [locationLng, setLocationLng] = useState(String(props.locationLng));
   const [mapsLink, setMapsLink] = useState(props.mapsLink);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError("");
-    setSuccess("");
+    notice.clear();
 
     if (password && password !== confirmPassword) {
-      setError("New password and confirmation do not match.");
+      notice.notify("New password and confirmation do not match.", "error");
       return;
     }
 
@@ -68,13 +68,14 @@ export function WebProfileForm(props: ProfileFormProps) {
 
       setPassword("");
       setConfirmPassword("");
-      setSuccess("Profile saved.");
+      notice.notify("Profile saved.", "success");
       router.refresh();
     } catch (submitError) {
-      setError(
+      notice.notify(
         submitError instanceof Error
           ? submitError.message
           : "Could not save profile.",
+        "error",
       );
     } finally {
       setSubmitting(false);
@@ -83,13 +84,6 @@ export function WebProfileForm(props: ProfileFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {error ? <Alert>{error}</Alert> : null}
-      {success ? (
-        <div className="rounded-xl border border-success-200 bg-success-50 px-4 py-3 text-sm text-success-600 dark:border-success-500/30 dark:bg-success-500/15 dark:text-success-500">
-          {success}
-        </div>
-      ) : null}
-
       <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-theme-xs sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white/90">
           Admin login
@@ -107,6 +101,7 @@ export function WebProfileForm(props: ProfileFormProps) {
               onChange={(e) => setUsername(e.target.value)}
               autoComplete="username"
               required
+              disabled={submitting}
             />
           </Field>
           <div className="hidden sm:block" />
@@ -118,6 +113,7 @@ export function WebProfileForm(props: ProfileFormProps) {
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
               placeholder="Leave blank to keep current"
+              disabled={submitting}
             />
           </Field>
           <Field label="Confirm new password">
@@ -128,6 +124,7 @@ export function WebProfileForm(props: ProfileFormProps) {
               onChange={(e) => setConfirmPassword(e.target.value)}
               autoComplete="new-password"
               placeholder="Repeat new password"
+              disabled={submitting}
             />
           </Field>
         </div>
@@ -151,6 +148,7 @@ export function WebProfileForm(props: ProfileFormProps) {
                 inputMode="numeric"
                 placeholder="6287858018811"
                 required
+                disabled={submitting}
               />
             </Field>
             <p className="mt-1.5 text-theme-xs text-gray-500 dark:text-gray-400">
@@ -165,6 +163,7 @@ export function WebProfileForm(props: ProfileFormProps) {
               value={whatsappMessage}
               onChange={(e) => setWhatsappMessage(e.target.value)}
               required
+              disabled={submitting}
             />
           </Field>
           <p className="text-theme-xs text-gray-500 dark:text-gray-400">
@@ -189,6 +188,7 @@ export function WebProfileForm(props: ProfileFormProps) {
               value={locationLabel}
               onChange={(e) => setLocationLabel(e.target.value)}
               required
+              disabled={submitting}
             />
           </Field>
           <Field label="Address">
@@ -198,6 +198,7 @@ export function WebProfileForm(props: ProfileFormProps) {
               value={locationAddress}
               onChange={(e) => setLocationAddress(e.target.value)}
               required
+              disabled={submitting}
             />
           </Field>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -208,6 +209,7 @@ export function WebProfileForm(props: ProfileFormProps) {
                 onChange={(e) => setLocationLat(e.target.value)}
                 inputMode="decimal"
                 required
+                disabled={submitting}
               />
             </Field>
             <Field label="Longitude">
@@ -217,6 +219,7 @@ export function WebProfileForm(props: ProfileFormProps) {
                 onChange={(e) => setLocationLng(e.target.value)}
                 inputMode="decimal"
                 required
+                disabled={submitting}
               />
             </Field>
           </div>
@@ -227,15 +230,23 @@ export function WebProfileForm(props: ProfileFormProps) {
               onChange={(e) => setMapsLink(e.target.value)}
               placeholder="https://maps.google.com/?q=..."
               required
+              disabled={submitting}
             />
           </Field>
         </div>
       </section>
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={submitting}>
-          {submitting ? "Saving…" : "Save profile"}
-        </Button>
+        <Tooltip
+          open={notice.open}
+          tone={notice.tone}
+          content={notice.message || "Save profile"}
+          placement="top"
+        >
+          <Button type="submit" disabled={submitting}>
+            {submitting ? "Saving…" : "Save profile"}
+          </Button>
+        </Tooltip>
       </div>
     </form>
   );

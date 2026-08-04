@@ -2,20 +2,22 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { Alert, Field, inputClass } from "@/components/form";
+import { Field, inputClass } from "@/components/form";
+import { Tooltip } from "@/components/Tooltip";
 import Button from "@/components/ui/button/Button";
+import { useNotifyTooltip } from "@/hooks/useNotifyTooltip";
 
 export function AdminLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const notice = useNotifyTooltip(4000);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError("");
+    notice.clear();
     setSubmitting(true);
 
     try {
@@ -35,10 +37,11 @@ export function AdminLoginForm() {
       );
       router.refresh();
     } catch (submitError) {
-      setError(
+      notice.notify(
         submitError instanceof Error
           ? submitError.message
           : "Could not sign in.",
+        "error",
       );
       setSubmitting(false);
     }
@@ -46,8 +49,6 @@ export function AdminLoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error ? <Alert>{error}</Alert> : null}
-
       <Field label="Username">
         <input
           type="text"
@@ -58,6 +59,7 @@ export function AdminLoginForm() {
           onChange={(event) => setUsername(event.target.value)}
           className={inputClass}
           placeholder="admin"
+          disabled={submitting}
         />
       </Field>
 
@@ -71,12 +73,20 @@ export function AdminLoginForm() {
           onChange={(event) => setPassword(event.target.value)}
           className={inputClass}
           placeholder="Enter password"
+          disabled={submitting}
         />
       </Field>
 
-      <Button type="submit" className="w-full" disabled={submitting}>
-        {submitting ? "Signing in…" : "Sign in"}
-      </Button>
+      <Tooltip
+        open={notice.open}
+        tone={notice.tone}
+        content={notice.message || "Sign in"}
+        className="w-full"
+      >
+        <Button type="submit" className="w-full" disabled={submitting}>
+          {submitting ? "Signing in…" : "Sign in"}
+        </Button>
+      </Tooltip>
     </form>
   );
 }

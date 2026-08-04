@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Alert, Field, inputClass, selectClass, textareaClass } from "@/components/form";
+import { Field, inputClass, selectClass, textareaClass } from "@/components/form";
+import { Tooltip } from "@/components/Tooltip";
 import Button from "@/components/ui/button/Button";
 import { Modal } from "@/components/ui/modal";
 import { useModal } from "@/hooks/useModal";
+import { useNotifyTooltip } from "@/hooks/useNotifyTooltip";
 
 const emptyForm = {
   name: "",
@@ -19,17 +21,17 @@ const emptyForm = {
 export function AddReviewAction() {
   const router = useRouter();
   const { isOpen, openModal, closeModal } = useModal();
+  const notice = useNotifyTooltip();
   const [form, setForm] = useState(emptyForm);
-  const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
       setForm(emptyForm);
-      setError("");
+      notice.clear();
       setSubmitting(false);
     }
-  }, [isOpen]);
+  }, [isOpen, notice.clear]);
 
   function updateField(field: keyof typeof emptyForm, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -37,7 +39,7 @@ export function AddReviewAction() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError("");
+    notice.clear();
     setSubmitting(true);
 
     try {
@@ -58,14 +60,18 @@ export function AddReviewAction() {
         throw new Error(data.error || "Could not save review.");
       }
 
-      closeModal();
-      router.replace("/secret/admin");
-      router.refresh();
+      notice.notify("Review saved.", "success");
+      window.setTimeout(() => {
+        closeModal();
+        router.replace("/secret/admin");
+        router.refresh();
+      }, 700);
     } catch (submitError) {
-      setError(
+      notice.notify(
         submitError instanceof Error
           ? submitError.message
           : "Could not save review.",
+        "error",
       );
       setSubmitting(false);
     }
@@ -88,8 +94,6 @@ export function AddReviewAction() {
         </div>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          {error ? <Alert>{error}</Alert> : null}
-
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Guest name">
               <input
@@ -99,6 +103,7 @@ export function AddReviewAction() {
                 value={form.name}
                 onChange={(e) => updateField("name", e.target.value)}
                 placeholder="Guest name"
+                disabled={submitting}
               />
             </Field>
             <Field label="Place">
@@ -108,6 +113,7 @@ export function AddReviewAction() {
                 value={form.place}
                 onChange={(e) => updateField("place", e.target.value)}
                 placeholder="Villa / area"
+                disabled={submitting}
               />
             </Field>
           </div>
@@ -121,6 +127,7 @@ export function AddReviewAction() {
               value={form.quote}
               onChange={(e) => updateField("quote", e.target.value)}
               placeholder="Short review quote shown on the site"
+              disabled={submitting}
             />
           </Field>
 
@@ -132,6 +139,7 @@ export function AddReviewAction() {
               value={form.review}
               onChange={(e) => updateField("review", e.target.value)}
               placeholder="Longer notes if needed"
+              disabled={submitting}
             />
           </Field>
 
@@ -141,6 +149,7 @@ export function AddReviewAction() {
                 className={selectClass}
                 value={form.rating}
                 onChange={(e) => updateField("rating", e.target.value)}
+                disabled={submitting}
               >
                 {[5, 4, 3, 2, 1].map((value) => (
                   <option key={value} value={value}>
@@ -154,6 +163,7 @@ export function AddReviewAction() {
                 className={selectClass}
                 value={form.status}
                 onChange={(e) => updateField("status", e.target.value)}
+                disabled={submitting}
               >
                 <option value="1">Show</option>
                 <option value="0">Hide</option>
@@ -171,9 +181,15 @@ export function AddReviewAction() {
             >
               Cancel
             </Button>
-            <Button type="submit" size="sm" disabled={submitting}>
-              {submitting ? "Saving…" : "Save review"}
-            </Button>
+            <Tooltip
+              open={notice.open}
+              tone={notice.tone}
+              content={notice.message || "Save review"}
+            >
+              <Button type="submit" size="sm" disabled={submitting}>
+                {submitting ? "Saving…" : "Save review"}
+              </Button>
+            </Tooltip>
           </div>
         </form>
       </Modal>

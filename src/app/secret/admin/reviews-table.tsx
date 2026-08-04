@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { ReviewRow } from "@/lib/reviews-db";
+import { Tooltip } from "@/components/Tooltip";
 import Button from "@/components/ui/button/Button";
 import { Modal } from "@/components/ui/modal";
 import {
@@ -12,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useNotifyTooltip } from "@/hooks/useNotifyTooltip";
 import { AdminPagination } from "./pagination";
 
 type AdminReviewsTableProps = {
@@ -30,13 +32,13 @@ export function AdminReviewsTable({
   totalPages,
 }: AdminReviewsTableProps) {
   const router = useRouter();
+  const notice = useNotifyTooltip();
   const [busyId, setBusyId] = useState<string | null>(null);
-  const [error, setError] = useState("");
   const [pendingDelete, setPendingDelete] = useState<ReviewRow | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   async function setStatus(id: string, status: 0 | 1) {
-    setError("");
+    notice.clear();
     setBusyId(id);
     try {
       const response = await fetch("/api/reviews", {
@@ -48,10 +50,15 @@ export function AdminReviewsTable({
       if (!response.ok || !data.ok) {
         throw new Error(data.error || "Update failed.");
       }
+      notice.notify(
+        status === 1 ? "Review is now visible." : "Review is now hidden.",
+        "success",
+      );
       router.refresh();
     } catch (updateError) {
-      setError(
+      notice.notify(
         updateError instanceof Error ? updateError.message : "Update failed.",
+        "error",
       );
     } finally {
       setBusyId(null);
@@ -65,7 +72,7 @@ export function AdminReviewsTable({
 
   async function confirmDelete() {
     if (!pendingDelete) return;
-    setError("");
+    notice.clear();
     setDeleting(true);
     setBusyId(pendingDelete.id);
     try {
@@ -79,10 +86,12 @@ export function AdminReviewsTable({
         throw new Error(data.error || "Delete failed.");
       }
       setPendingDelete(null);
+      notice.notify("Review deleted.", "success");
       router.refresh();
     } catch (deleteError) {
-      setError(
+      notice.notify(
         deleteError instanceof Error ? deleteError.message : "Delete failed.",
+        "error",
       );
     } finally {
       setDeleting(false);
@@ -103,11 +112,6 @@ export function AdminReviewsTable({
   return (
     <>
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-theme-xs dark:border-gray-800 dark:bg-white/[0.03]">
-        {error ? (
-          <p className="border-b border-error-200 bg-error-50 px-4 py-3 text-theme-sm text-error-600 dark:border-error-500/30 dark:bg-error-500/15 dark:text-error-400">
-            {error}
-          </p>
-        ) : null}
         <div className="overflow-x-auto">
           <Table>
             <TableHeader className="border-b border-gray-100 dark:border-gray-800">
@@ -140,7 +144,14 @@ export function AdminReviewsTable({
                   isHeader
                   className="px-4 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400"
                 >
-                  Actions
+                  <Tooltip
+                    open={notice.open}
+                    tone={notice.tone}
+                    content={notice.message || "Review actions"}
+                    placement="bottom"
+                  >
+                    <span className="inline-block">Actions</span>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -184,16 +195,16 @@ export function AdminReviewsTable({
                           type="button"
                           size="xs"
                           variant="outline"
-                          disabled={busy}
+                          disabled={busy || Boolean(busyId)}
                           onClick={() => setStatus(review.id, visible ? 0 : 1)}
                         >
-                          {visible ? "Hide" : "Show"}
+                          {busy ? "Updating…" : visible ? "Hide" : "Show"}
                         </Button>
                         <Button
                           type="button"
                           size="xs"
                           variant="danger"
-                          disabled={busy}
+                          disabled={busy || Boolean(busyId)}
                           onClick={() => setPendingDelete(review)}
                         >
                           Delete
@@ -247,15 +258,21 @@ export function AdminReviewsTable({
           >
             Cancel
           </Button>
-          <Button
-            type="button"
-            size="sm"
-            variant="danger"
-            onClick={confirmDelete}
-            disabled={deleting}
+          <Tooltip
+            open={notice.open && deleting === false && Boolean(pendingDelete)}
+            tone={notice.tone}
+            content={notice.message || "Delete review"}
           >
-            {deleting ? "Deleting…" : "Delete"}
-          </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="danger"
+              onClick={confirmDelete}
+              disabled={deleting}
+            >
+              {deleting ? "Deleting…" : "Delete"}
+            </Button>
+          </Tooltip>
         </div>
       </Modal>
     </>

@@ -1,21 +1,53 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
+import { Tooltip } from "@/components/Tooltip";
 
-type FormState = "idle" | "submitting" | "success" | "error";
+type FormState = "idle" | "submitting" | "success" | "error" | "limited";
 
 export function ReviewForm() {
   const [state, setState] = useState<FormState>("idle");
   const [error, setError] = useState("");
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
+  const [cooldownSec, setCooldownSec] = useState(0);
 
   const previewRating = hoverRating || rating;
+  const busy = state === "submitting";
+  const limited = state === "limited" || cooldownSec > 0;
+  const disabled = busy || limited;
+
+  useEffect(() => {
+    if (cooldownSec <= 0) return;
+    const timer = window.setTimeout(() => {
+      setCooldownSec((value) => {
+        const next = value - 1;
+        if (next <= 0) {
+          setState((current) => (current === "limited" ? "idle" : current));
+          setError("");
+          return 0;
+        }
+        return next;
+      });
+    }, 1000);
+    return () => window.clearTimeout(timer);
+  }, [cooldownSec]);
+
+  useEffect(() => {
+    if (state !== "success" && state !== "error") return;
+    const timer = window.setTimeout(() => {
+      setState("idle");
+      setError("");
+    }, 4000);
+    return () => window.clearTimeout(timer);
+  }, [state]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (disabled) return;
+
     setError("");
 
     if (rating < 1) {
@@ -42,7 +74,23 @@ export function ReviewForm() {
         }),
       });
 
-      const result = (await response.json()) as { ok?: boolean; error?: string };
+      const result = (await response.json()) as {
+        ok?: boolean;
+        error?: string;
+        retryAfterSec?: number;
+      };
+
+      if (response.status === 429) {
+        const wait = Math.max(1, Number(result.retryAfterSec) || 300);
+        setCooldownSec(wait);
+        setState("limited");
+        setError(
+          result.error ||
+            "Too many reviews sent. Please wait a few minutes before trying again.",
+        );
+        return;
+      }
+
       if (!response.ok || !result.ok) {
         throw new Error(result.error ?? "Something went wrong.");
       }
@@ -50,6 +98,7 @@ export function ReviewForm() {
       form.reset();
       setRating(0);
       setHoverRating(0);
+      setCooldownSec(0);
       setState("success");
     } catch (submitError) {
       setState("error");
@@ -60,6 +109,25 @@ export function ReviewForm() {
       );
     }
   }
+
+  const cooldownLabel =
+    cooldownSec > 60
+      ? `${Math.ceil(cooldownSec / 60)} min`
+      : `${cooldownSec}s`;
+
+  const tooltipOpen = state === "limited" || state === "error" || state === "success";
+  const tooltipTone =
+    state === "limited" ? "warning" : state === "error" ? "error" : "success";
+  const tooltipContent =
+    state === "limited"
+      ? `${error || "Too many reviews sent."}${
+          cooldownSec > 0 ? ` Try again in ${cooldownLabel}.` : ""
+        }`
+      : state === "error"
+        ? error
+        : state === "success"
+          ? "Thank you — we appreciate your feedback."
+          : "Submit your review";
 
   return (
     <section
@@ -84,6 +152,7 @@ export function ReviewForm() {
           <form
             onSubmit={handleSubmit}
             className="mt-10 space-y-4 rounded-2xl border border-ink/8 bg-surface-cream p-6 text-left sm:p-8"
+            aria-busy={busy}
           >
             <input
               type="text"
@@ -100,7 +169,8 @@ export function ReviewForm() {
                 name="name"
                 required
                 maxLength={80}
-                className="mt-2 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-candle"
+                disabled={disabled}
+                className="mt-2 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-candle disabled:cursor-not-allowed disabled:opacity-60"
                 placeholder="Hannah & Mark"
               />
             </label>
@@ -112,7 +182,8 @@ export function ReviewForm() {
                 required
                 maxLength={500}
                 rows={3}
-                className="mt-2 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-candle"
+                disabled={disabled}
+                className="mt-2 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-candle disabled:cursor-not-allowed disabled:opacity-60"
                 placeholder="Best dinner of the trip — the chef handled everything."
               />
             </label>
@@ -124,7 +195,8 @@ export function ReviewForm() {
               <input
                 name="place"
                 maxLength={120}
-                className="mt-2 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-candle"
+                disabled={disabled}
+                className="mt-2 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-candle disabled:cursor-not-allowed disabled:opacity-60"
                 placeholder="Villa dinner, Senggigi"
               />
             </label>
@@ -137,12 +209,13 @@ export function ReviewForm() {
                 name="review"
                 maxLength={500}
                 rows={3}
-                className="mt-2 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-candle"
+                disabled={disabled}
+                className="mt-2 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink outline-none transition-colors focus:border-candle disabled:cursor-not-allowed disabled:opacity-60"
                 placeholder="Menus adapted perfectly to our dietary needs."
               />
             </label>
 
-            <fieldset className="text-center">
+            <fieldset className="text-center" disabled={disabled}>
               <legend className="text-sm font-medium text-ink">Rating</legend>
               <div
                 className="mt-3 flex justify-center gap-2 text-candle"
@@ -154,13 +227,14 @@ export function ReviewForm() {
                     <button
                       key={value}
                       type="button"
+                      disabled={disabled}
                       aria-label={`${value} star${value === 1 ? "" : "s"}`}
                       aria-pressed={rating === value}
                       onClick={() => setRating(value)}
                       onMouseEnter={() => setHoverRating(value)}
                       onFocus={() => setHoverRating(value)}
                       onBlur={() => setHoverRating(0)}
-                      className="transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-candle/50 rounded-sm"
+                      className="rounded-sm transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-candle/50 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
                     >
                       <svg
                         aria-hidden="true"
@@ -177,22 +251,25 @@ export function ReviewForm() {
               </div>
             </fieldset>
 
-            <button
-              type="submit"
-              disabled={state === "submitting"}
-              className="inline-flex w-full items-center justify-center rounded-full bg-candle px-6 py-3.5 text-sm font-medium tracking-wide text-ink transition-colors hover:bg-cream disabled:opacity-60"
+            <Tooltip
+              open={tooltipOpen}
+              tone={tooltipTone}
+              content={tooltipContent}
+              className="w-full"
             >
-              {state === "submitting" ? "Sending..." : "Submit review"}
-            </button>
-
-            {state === "success" && (
-              <p className="text-center text-sm font-medium text-ink">
-                Thank you — we appreciate your feedback.
-              </p>
-            )}
-            {state === "error" && (
-              <p className="text-center text-sm text-red-700">{error}</p>
-            )}
+              <button
+                type="submit"
+                disabled={disabled}
+                aria-live="polite"
+                className="inline-flex w-full items-center justify-center rounded-full bg-candle px-6 py-3.5 text-sm font-medium tracking-wide text-ink transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {busy
+                  ? "Sending..."
+                  : limited
+                    ? `Wait ${cooldownLabel}`
+                    : "Submit review"}
+              </button>
+            </Tooltip>
           </form>
         </Reveal>
       </div>

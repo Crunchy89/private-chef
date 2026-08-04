@@ -2,8 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Alert, Field, inputClass, textareaClass } from "@/components/form";
+import { Field, inputClass, textareaClass } from "@/components/form";
+import { Tooltip } from "@/components/Tooltip";
 import Button from "@/components/ui/button/Button";
+import { useNotifyTooltip } from "@/hooks/useNotifyTooltip";
 import type { SiteContentFields } from "@/lib/site-content";
 
 type PreviewContentFormProps = {
@@ -12,9 +14,8 @@ type PreviewContentFormProps = {
 
 export function PreviewContentForm({ initial }: PreviewContentFormProps) {
   const router = useRouter();
+  const notice = useNotifyTooltip();
   const [form, setForm] = useState(initial);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   function update<K extends keyof SiteContentFields>(
@@ -26,8 +27,7 @@ export function PreviewContentForm({ initial }: PreviewContentFormProps) {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError("");
-    setSuccess("");
+    notice.clear();
     setSubmitting(true);
 
     try {
@@ -45,13 +45,14 @@ export function PreviewContentForm({ initial }: PreviewContentFormProps) {
         throw new Error(data.error || "Could not save content.");
       }
       if (data.content) setForm(data.content);
-      setSuccess("Content saved. Live site updated.");
+      notice.notify("Content saved. Live site updated.", "success");
       router.refresh();
     } catch (submitError) {
-      setError(
+      notice.notify(
         submitError instanceof Error
           ? submitError.message
           : "Could not save content.",
+        "error",
       );
     } finally {
       setSubmitting(false);
@@ -60,13 +61,6 @@ export function PreviewContentForm({ initial }: PreviewContentFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {error ? <Alert>{error}</Alert> : null}
-      {success ? (
-        <div className="rounded-xl border border-success-200 bg-success-50 px-4 py-3 text-sm text-success-600 dark:border-success-500/30 dark:bg-success-500/15 dark:text-success-500">
-          {success}
-        </div>
-      ) : null}
-
       <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-theme-xs sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white/90">
           Header
@@ -81,6 +75,7 @@ export function PreviewContentForm({ initial }: PreviewContentFormProps) {
               value={form.site_name}
               onChange={(e) => update("site_name", e.target.value)}
               required
+              disabled={submitting}
             />
           </Field>
         </div>
@@ -244,9 +239,15 @@ export function PreviewContentForm({ initial }: PreviewContentFormProps) {
       </section>
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={submitting}>
-          {submitting ? "Saving…" : "Save content"}
-        </Button>
+        <Tooltip
+          open={notice.open}
+          tone={notice.tone}
+          content={notice.message || "Save content"}
+        >
+          <Button type="submit" disabled={submitting}>
+            {submitting ? "Saving…" : "Save content"}
+          </Button>
+        </Tooltip>
       </div>
     </form>
   );
